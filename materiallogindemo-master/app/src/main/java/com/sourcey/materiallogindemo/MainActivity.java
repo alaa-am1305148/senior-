@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     User user;
     Random r;
     String selectedDate = " ";
-    int [] fixedTime =  {7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
-    int [] fixedTimeCounter =new int[fixedTime.length];
+   final int [] fixedTime =  {7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+    final int [] fixedTimeCounter =new int[fixedTime.length];
     Reservation reservation;
 
     List<Integer> time = new ArrayList<>() ;
@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         users = new ArrayList<>();
         reservations = new ArrayList<>();
 
+        Intent intent = getIntent();
+        //text = (TextView) findViewById(R.id.t-1);
+        zoneName = intent.getStringExtra("zoneName");
 
         databaseReservations.addValueEventListener(new ValueEventListener() {
             @Override
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                     for (int k=0; k< fixedTime.length;  k++){
                         for(int i=0;  i< reservations.size(); i++)
                         {
-                            if (reservations.get(i).getData().equals(selectedDate) ){
+                            if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName)){
                                 for (int j=0; j< reservations.get(i).getTime().size() ;j++){
                                     if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
                                         fixedTimeCounter[k]= fixedTimeCounter[k]+1;
@@ -219,9 +222,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             }
         });
-         Intent intent = getIntent();
-        //text = (TextView) findViewById(R.id.t-1);
-        zoneName = intent.getStringExtra("zoneName");
+
 
       /*  if (plateNo == null){
             email = intent.getStringExtra("email");
@@ -573,15 +574,6 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        MainActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListner,
-                        year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
 
         mDateSetListner = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -597,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
                 for (int k = 0; k < fixedTime.length; k++) {
                     for (int i = 0; i < reservations.size(); i++) {
-                        if (reservations.get(i).getData().equals(selectedDate)) {
+                        if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName)) {
                             for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
                                 if (reservations.get(i).getTime().get(j).equals(fixedTime[k])) {
                                     fixedTimeCounter[k] = fixedTimeCounter[k] + 1;
@@ -610,54 +602,109 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                 if ((3 - fixedTimeCounter[0]) <= 0) {
                     button0.setBackgroundColor(Color.RED);
                 }
+                else
+                {
+                    button0.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[1]) <= 0) {
                     button1.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button1.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[2]) <= 0) {
                     button2.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button2.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[3]) <= 0) {
                     button3.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button3.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[4]) <= 0) {
                     button4.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button4.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[5]) <= 0) {
                     button5.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button5.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[6]) <= 0) {
                     button6.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button6.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[7]) <= 0) {
                     button7.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button7.setBackgroundColor(0xFF4383CC);
                 }
 
                 if ((3 - fixedTimeCounter[8]) <= 0) {
                     button8.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button8.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[9]) <= 0) {
                     button9.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button9.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[10]) <= 0) {
                     button10.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button10.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[11]) <= 0) {
                     button11.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button11.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[12]) <= 0) {
                     button12.setBackgroundColor(Color.RED);
                 }
+                else {
+                    button12.setBackgroundColor(0xFF4383CC);
+                }
                 if ((3 - fixedTimeCounter[13]) <= 0) {
                     button13.setBackgroundColor(Color.RED);
+                }
+                else {
+                    button13.setBackgroundColor(0xFF4383CC);
                 }
                 if ((3 - fixedTimeCounter[14]) <= 0) {
                     button14.setBackgroundColor(Color.RED);
                 }
-
+                else {
+                    button14.setBackgroundColor(0xFF4383CC);
+                }
             }
 
 
         };
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        MainActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListner,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
 
 
 
@@ -687,7 +734,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         for (int k=0; k< time.size(); k++){
             for(int i=0;  i< reservations.size(); i++)
             {
-                if (reservations.get(i).getData().equals(selectedDate) ){
+                if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) ){
                     for (int j=0; j< reservations.get(i).getTime().size() ;j++){
                         if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
                             counters[k]= counters[k]+1;
@@ -726,7 +773,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     }
 
 }
-       boolean registeredBefore = false;
+      boolean registeredBefore = false;
         String alertMessage2 = "You already has a reservation  at \n" ;
         for (int i =0; i< reservations.size(); i++){
             if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getData().equals(selectedDate)){
@@ -757,6 +804,30 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             return;
         }
 
+
+       int totalReservationHours = 0;
+        for (int i =0; i< reservations.size(); i++) {
+            if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getData().equals(selectedDate)) {
+                totalReservationHours += reservations.get(i).getTime().size();
+            }
+        }
+        if( (totalReservationHours + Integer.parseInt(hours)) > 6){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage("You exceed the total allowed number of hours which is 6 hours per day.\n" + "Total reservation hours for you are: " + totalReservationHours);
+            builder.setTitle("Error");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog a = builder.create();
+            a.show();
+
+            return;
+
+        }
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
