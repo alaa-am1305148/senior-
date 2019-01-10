@@ -1,12 +1,13 @@
 package com.sourcey.materiallogindemo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Alaa on 10/25/2018.
  */
 
-public class Reservation {
+public class Reservation implements Serializable {
 
     int resNo ;
     String zoneName, data ,carPlateNo , status ;

@@ -1,6 +1,7 @@
 package com.sourcey.materiallogindemo;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +15,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Choices extends AppCompatActivity {
 
     DatabaseReference databaseUsers;
-
+    DatabaseReference databaseReservations;
+    List<Reservation> reservations;
     String email, plateNo;
     List<User> users;
     public static User user;
@@ -33,7 +36,7 @@ public class Choices extends AppCompatActivity {
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
         users = new ArrayList<>();
         Button checkBtn = findViewById(R.id.check_btn);
-        Button reserveBtn = findViewById(R.id.reserve_btn);
+        final Button reserveBtn = findViewById(R.id.reserve_btn);
         Button showReservationBtn = findViewById(R.id.show_res_btn);
         progressBar = (ProgressBar) findViewById(R.id.progressbar1);
          progressBarText = (TextView) findViewById(R.id.progressBarinsideText1);
@@ -78,6 +81,28 @@ public class Choices extends AppCompatActivity {
             }
         });
 
+        databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
+        reservations = new ArrayList<>();
+        databaseReservations.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Reservation reservation = postSnapshot.getValue(Reservation.class);
+                    //adding artist to the list
+                    reservations.add(reservation);
+                }
+
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
 
 
 
@@ -113,12 +138,38 @@ public class Choices extends AppCompatActivity {
 
 
 
-       /* showReservationBtn.setOnClickListener(new View.OnClickListener() {
+        showReservationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
+                reservations = new ArrayList<>();
+                databaseReservations.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //iterating through all the nodes
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //getting artist
+                            Reservation reservation = postSnapshot.getValue(Reservation.class);
+                            //adding artist to the list
+                            reservations.add(reservation);
+                        }
+                        Intent intent = new Intent(Choices.this, ShowReservations.class);
+                        intent.putExtra("LIST", (Serializable) reservations);
+                        startActivity(intent);
+
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+                });
+
 
             }
-        });*/
+        });
 
 
     }
