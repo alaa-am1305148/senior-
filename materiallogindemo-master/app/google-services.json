@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "777762792693-2960j83kiftrbgf469236c48parcnu4j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sourcey.materialloginexample",
-            "certificate_hash": "3c9acfd6edff62a82fd6d180ecd83430d7704622"
-          }
-        },
-        {
           "client_id": "777762792693-f7ft4b7h3crgsfg8mtnkh4965megbanm.apps.googleusercontent.com",
           "client_type": 3
         }

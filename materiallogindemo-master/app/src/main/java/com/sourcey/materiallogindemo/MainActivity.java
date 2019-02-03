@@ -756,7 +756,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             }
     if (i == counters.length-1 && exist == false){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this );
         builder.setMessage(alertMessage+"");
         builder.setTitle("Error");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -773,7 +773,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     }
 
 }
-      boolean registeredBefore = false;
+   /*   boolean registeredBefore = false;
         String alertMessage2 = "You already has a reservation  at \n" ;
         for (int i =0; i< reservations.size(); i++){
             if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getData().equals(selectedDate)){
@@ -803,7 +803,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             return;
         }
-
+*/
 
        int totalReservationHours = 0;
         for (int i =0; i< reservations.size(); i++) {
