@@ -104,6 +104,7 @@ public class ShowReservations extends AppCompatActivity {
 
                      for (int j = 0; j < reservations4.size(); j++) {
                          String resDate = reservations4.get(j).getData();
+                         String status = reservations4.get(j).getStatus();
                          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                          Date strDate = null;
                          Date currentDate = new Date();
@@ -112,7 +113,7 @@ public class ShowReservations extends AppCompatActivity {
                          } catch (ParseException e) {
                              e.printStackTrace();
                          }
-                         if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() >= currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth()  ) {
+                         if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() >= currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) ) {
                              reservations5.add(reservations4.get(j));
                          }
                      }
@@ -149,6 +150,7 @@ public class ShowReservations extends AppCompatActivity {
 
             }
             Button extend =(Button) v.findViewById(R.id.button15);
+            Button cancel =(Button) v.findViewById(R.id.button16);
             TextView date =v.findViewById(R.id.date);
             TextView ResNo =v.findViewById(R.id.ResNo);
             TextView time =v.findViewById(R.id.time);
@@ -316,6 +318,98 @@ public class ShowReservations extends AppCompatActivity {
 
                     }
                 }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+
+
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+                    int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+                    int currentMinute = cal.get(Calendar.MINUTE);
+                    int endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
+
+                    String uDate = getItem(p).getData()+"";
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date strDate = null;
+                    try {
+                        strDate = sdf.parse(uDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    Date currentDate = new Date();
+                    // if (  currentHour == endTime-1 && currentMinute >= 30){
+                    if ( endTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
+                            builder.setMessage("Are you sure you want to cancel this reservation");
+                            builder.setTitle("Confirmation Message");
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), getItem(p).getTime() , "canceled", getItem(p).getPrice());
+
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                                    Query applesQuery = ref.child("reservations").orderByChild("resNo").equalTo(getItem(p).getResNo());
+
+                                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                appleSnapshot.getRef().removeValue();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+
+                                    String id = databaseReservations.push().getKey();
+                                    databaseReservations.child(id).setValue(reservation);
+                                    finish();
+                                }
+                            });
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            AlertDialog a = builder.create();
+                            a.show();
+
+                        }
+
+                    else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
+
+                        builder.setMessage("You can not cancel at this time " );
+                        builder.setTitle("Error");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+
+                            }
+
+                        });
+                        AlertDialog a = builder.create();
+                        a.show();
+
+                    }
+
+
+                }
+
             });
 
             return v;
