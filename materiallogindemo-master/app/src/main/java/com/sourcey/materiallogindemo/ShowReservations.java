@@ -208,19 +208,12 @@ public class ShowReservations extends AppCompatActivity {
                                 for (int i = 0; i < reservations3.size(); i++) {
                                     if (reservations3.get(i).getData().equals(getItem(p).getData()) && reservations3.get(i).getZoneName().equals(getItem(p).getZoneName())) {
                                         for (int j = 0; j < reservations3.get(i).getTime().size(); j++) {
-                                            if (reservations3.get(i).getTime().get(j).equals(endTime)) {
+                                            if (reservations3.get(i).getTime().get(j).equals(endTime-1)) {
                                                 fixedTimeCounter++;
                                             }
                                         }
                                     }
                                 }
-                            }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
 
                                 if (fixedTimeCounter < 2) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
@@ -263,6 +256,7 @@ public class ShowReservations extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
+                                          
                                         }
                                     });
                                     AlertDialog a = builder.create();
@@ -277,11 +271,23 @@ public class ShowReservations extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
+
                                         }
                                     });
                                     AlertDialog a = builder.create();
                                     a.show();
                                 }
+
+
+
+                            }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
 
 
 
@@ -310,6 +316,7 @@ public class ShowReservations extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
 
+
                             }
 
                         });
@@ -331,7 +338,7 @@ public class ShowReservations extends AppCompatActivity {
                     cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
                     int currentHour = cal.get(Calendar.HOUR_OF_DAY);
                     int currentMinute = cal.get(Calendar.MINUTE);
-                    int endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
+                    int startTime = getItem(p).getTime().get(0);
 
                     String uDate = getItem(p).getData()+"";
 
@@ -344,8 +351,11 @@ public class ShowReservations extends AppCompatActivity {
                     }
                     Date currentDate = new Date();
                     // if (  currentHour == endTime-1 && currentMinute >= 30){
-                    if ( endTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
-
+               //     if ( startTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
+                    int i;
+                    for ( i=0; i< getItem(p).getTime().size(); i++) {
+                        if ( getItem(p).getTime().get(i)- currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()) {
+                            final int index = i;
                             AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
                             builder.setMessage("Are you sure you want to cancel this reservation");
                             builder.setTitle("Confirmation Message");
@@ -354,7 +364,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), getItem(p).getTime() , "canceled", getItem(p).getPrice());
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size()-index)*5*0.5+ (index-0)*5));
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -382,29 +392,30 @@ public class ShowReservations extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
+
                                 }
                             });
                             AlertDialog a = builder.create();
                             a.show();
 
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
+
+                            builder.setMessage("You can not cancel at this time ");
+                            builder.setTitle("Error");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    finish();
+
+                                }
+
+                            });
+                            AlertDialog a = builder.create();
+                            a.show();
+
                         }
-
-                    else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
-
-                        builder.setMessage("You can not cancel at this time " );
-                        builder.setTitle("Error");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-
-                            }
-
-                        });
-                        AlertDialog a = builder.create();
-                        a.show();
-
                     }
 
 
