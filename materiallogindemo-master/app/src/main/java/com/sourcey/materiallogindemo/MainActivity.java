@@ -24,10 +24,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.TimeZone;
 
 
 public class MainActivity extends AppCompatActivity implements android.widget.AdapterView.OnItemSelectedListener{
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
    final int [] fixedTime =  {7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
     final int [] fixedTimeCounter =new int[fixedTime.length];
     Reservation reservation;
+    int day;
 
     List<Integer> time = new ArrayList<>() ;
 
@@ -572,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+                day = cal.get(Calendar.DAY_OF_MONTH);
 
 
         mDateSetListner = new DatePickerDialog.OnDateSetListener() {
@@ -731,48 +736,130 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             counters[i]=0;
         }
 
-        for (int k=0; k< time.size(); k++){
-            for(int i=0;  i< reservations.size(); i++)
-            {
-                if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) ){
-                    for (int j=0; j< reservations.get(i).getTime().size() ;j++){
-                        if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
-                            counters[k]= counters[k]+1;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse(selectedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date currentDate = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+
+        if (strDate.getDay() - currentDate.getDay() == 1 ){
+
+            for (int k=0; k< time.size(); k++){
+                for(int i=0;  i< reservations.size(); i++)
+                {
+                    if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) ){
+                        for (int j=0; j< reservations.get(i).getTime().size() ;j++){
+                            if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
+                                counters[k]= counters[k]+1;
+                            }
                         }
                     }
                 }
             }
+
+            String alertMessage = "No available parking at \n" ;
+            boolean exist = true;
+
+            for(int i=0; i<counters.length ; i++){
+
+                if ((3-counters[i]) <= 0){
+                    exist = false;
+                    //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
+                    //   Toast.LENGTH_LONG).show();
+                    alertMessage =  alertMessage + time.get(i)+":00 \n";
+
+                }
+                if (i == counters.length-1 && exist == false){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this );
+                    builder.setMessage(alertMessage+"");
+                    builder.setTitle("Error");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog a = builder.create();
+                    a.show();
+
+                    return;
+
+                }
+
+            }
         }
-        String alertMessage = "No available parking at \n" ;
-        boolean exist = true;
+        else if (strDate.getDay() - currentDate.getDay() == 0 && Integer.parseInt(startTime) - currentHour >=1){
 
-        for(int i=0; i<counters.length ; i++){
+            for (int k=0; k< time.size(); k++){
+                for(int i=0;  i< reservations.size(); i++)
+                {
+                    if (reservations.get(i).getData().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) ){
+                        for (int j=0; j< reservations.get(i).getTime().size() ;j++){
+                            if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
+                                counters[k]= counters[k]+1;
+                            }
+                        }
+                    }
+                }
+            }
 
-            if ((3-counters[i]) <= 0){
-                exist = false;
-              //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
-                     //   Toast.LENGTH_LONG).show();
-            alertMessage =  alertMessage + time.get(i)+":00 \n";
+            String alertMessage = "No available parking at \n" ;
+            boolean exist = true;
+
+            for(int i=0; i<counters.length ; i++){
+
+                if ((3-counters[i]) <= 0){
+                    exist = false;
+                    //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
+                    //   Toast.LENGTH_LONG).show();
+                    alertMessage =  alertMessage + time.get(i)+":00 \n";
+
+                }
+                if (i == counters.length-1 && exist == false){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this );
+                    builder.setMessage(alertMessage+"");
+                    builder.setTitle("Error");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog a = builder.create();
+                    a.show();
+
+                    return;
+
+                }
 
             }
-    if (i == counters.length-1 && exist == false){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this );
-        builder.setMessage(alertMessage+"");
-        builder.setTitle("Error");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog a = builder.create();
-        a.show();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        return;
+            builder.setMessage("You can not register at this time");
+            builder.setTitle("Error");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog a = builder.create();
+            a.show();
 
-    }
+            return;
+        }
 
-}
+
+
    /*   boolean registeredBefore = false;
         String alertMessage2 = "You already has a reservation  at \n" ;
         for (int i =0; i< reservations.size(); i++){
