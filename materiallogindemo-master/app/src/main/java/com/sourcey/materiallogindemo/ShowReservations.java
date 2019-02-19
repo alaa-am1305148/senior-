@@ -103,7 +103,7 @@ public class ShowReservations extends AppCompatActivity {
                      }
 
                      for (int j = 0; j < reservations4.size(); j++) {
-                         String resDate = reservations4.get(j).getData();
+                         String resDate = reservations4.get(j).getDate();
                          String status = reservations4.get(j).getStatus();
                          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                          Date strDate = null;
@@ -156,7 +156,7 @@ public class ShowReservations extends AppCompatActivity {
             TextView time =v.findViewById(R.id.time);
             TextView zoneName =v.findViewById(R.id.zoneName);
             ResNo.setText("Reservation No: "+getItem(p).getResNo()+"");
-            date.setText("Date: "+getItem(p).getData());
+            date.setText("Date: "+getItem(p).getDate());
             zoneName.setText("Zone Name: "+getItem(p).getZoneName());
              endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
             time.setText("Time: "+getItem(p).getTime().get(0)+ " to " + endTime );
@@ -172,7 +172,7 @@ public class ShowReservations extends AppCompatActivity {
                     int currentMinute = cal.get(Calendar.MINUTE);
                     endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
 
-                    uDate = getItem(p).getData()+"";
+                    uDate = getItem(p).getDate()+"";
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     Date strDate = null;
@@ -206,7 +206,7 @@ public class ShowReservations extends AppCompatActivity {
 
 
                                 for (int i = 0; i < reservations3.size(); i++) {
-                                    if (reservations3.get(i).getData().equals(getItem(p).getData()) && reservations3.get(i).getZoneName().equals(getItem(p).getZoneName())) {
+                                    if (reservations3.get(i).getDate().equals(getItem(p).getDate()) && reservations3.get(i).getZoneName().equals(getItem(p).getZoneName())) {
                                         for (int j = 0; j < reservations3.get(i).getTime().size(); j++) {
                                             if (reservations3.get(i).getTime().get(j).equals(endTime-1)) {
                                                 fixedTimeCounter++;
@@ -228,7 +228,7 @@ public class ShowReservations extends AppCompatActivity {
                                             }
                                             time.add(endTime);
 
-                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), time, "extended", getItem(p).getPrice() + 5);
+                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), time, "extended", getItem(p).getPrice() + 5);
 
                                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -340,7 +340,7 @@ public class ShowReservations extends AppCompatActivity {
                     int currentMinute = cal.get(Calendar.MINUTE);
                     int startTime = getItem(p).getTime().get(0);
 
-                    String uDate = getItem(p).getData()+"";
+                    String uDate = getItem(p).getDate()+"";
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     Date strDate = null;
@@ -365,7 +365,7 @@ public class ShowReservations extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
 
 
-                                        Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
+                                        Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
 
                                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -414,7 +414,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getData(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 

@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ShowReservations" />
@@ -17,7 +17,8 @@
         <activity android:name=".Property" />
         <activity android:name=".ZonesList" />
         <activity android:name=".Choices" />
-        <activity android:name=".First">
+        <activity android:name=".First" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Choices2" />
-        <activity android:name=".Check_availability"></activity>
+        <activity android:name=".Check_availability" />
+        <activity android:name=".ZoneList2"></activity>
     </application>
 
 </manifest>

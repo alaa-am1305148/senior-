@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -41,37 +42,20 @@
             android:layout_marginBottom="10dp"
             android:text="Description"
             android:textSize="15sp" />
+
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/statSection"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="133dp"
-        android:orientation="vertical">
+        android:layout_alignBottom="@+id/image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp"
+        android:text="TextView" />
 
-        <TextView
-            android:id="@+id/totalAv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cuurentAvNo"
-            android:layout_marginRight="15dp"
-            android:textSize="12sp"
-            android:layout_marginEnd="15dp" />
 
-        <TextView
-            android:id="@+id/carspot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cuurentAvNo"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@id/totalAv"
-            android:textSize="12sp"
-            android:typeface="normal"
-            android:layout_marginEnd="15dp"
-            android:layout_toEndOf="@id/totalAv" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

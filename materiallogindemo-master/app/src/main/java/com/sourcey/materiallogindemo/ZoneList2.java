@@ -3,6 +3,7 @@ package com.sourcey.materiallogindemo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,17 +24,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class ZonesList extends AppCompatActivity  {
-
+public class ZoneList2 extends AppCompatActivity {
     private ArrayList<Property> zoneProperties = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.zoneslist_layout);
+        setContentView(R.layout.activity_zone_list3);
+
 
 
         final List<Property> zones;
@@ -65,9 +72,14 @@ public class ZonesList extends AppCompatActivity  {
             }
         });
 
+
+
         //create our property elements
-        zoneProperties.add(new Property("CBAE Female & Male Zone", 0,"College of Business and Economics Building - (H08)","property_image_1", 4));
-        zoneProperties.add(new Property("LIB Female & Male Zone", 0," Library Building - (B13)","property_image_2", 4));
+
+        zoneProperties.add(new Property("CENG Female Zone", 0,"College of Engineering - Female (C07)","property_image_1", 4));
+        zoneProperties.add(new Property("CAAS Female Zone", 0,"College of Art and Science - Female (C01)","property_image_2", 4));
+        zoneProperties.add(new Property("CENG Male Zone", 0,"College of Engineering - Male (BCR)","property_image_3", 4));
+        zoneProperties.add(new Property("BNK Male Zone", 0,"Bank/Ibn Khaldoon Hall - Male (B11)","property_image_4", 4));
 
         //create our new array adapter
         ArrayAdapter<Property> adapter = new propertyArrayAdapter(this, 0, zoneProperties);
@@ -77,13 +89,16 @@ public class ZonesList extends AppCompatActivity  {
         listView.setAdapter(adapter);
 
 
-        //add event listener so we can handle clicks
         AdapterView.OnItemClickListener adapterViewListener = new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Property property = zoneProperties.get(position);
+                final Property property = zoneProperties.get(position);
+
+
+
+
 
 
                 for (int j = 0; j <zones.size(); j++) {
@@ -117,19 +132,19 @@ public class ZonesList extends AppCompatActivity  {
 
                 }
 
-                Intent intent = new Intent(ZonesList.this, MainActivity.class);
-                intent.putExtra("zoneName", property.getZoneName());
-              //  intent.putExtra("image", property.getImage());
-                intent.putExtra("plateNo", getIntent().getStringExtra("plateNo"));
 
+
+                Intent intent = new Intent(ZoneList2.this, Check_availability.class);
+                intent.putExtra("zoneName", property.getZoneName());
                 startActivity(intent);
+             //   startActivityForResult(intent, 1000);
             }
         };
         //set the listener to the list view
         listView.setOnItemClickListener(adapterViewListener);
 
-
     }
+
 
     //custom ArrayAdapater
     static class propertyArrayAdapter extends ArrayAdapter<Property>{
@@ -149,23 +164,26 @@ public class ZonesList extends AppCompatActivity  {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             //get the property we are displaying
-           final Property property = zoneProperties.get(position);
+            final Property property = zoneProperties.get(position);
 
             //get the inflater and inflate the XML layout for each item
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
             //conditionally inflate either standard or special template
-            View view;
+            final View view;
+            view = inflater.inflate(R.layout.property_layout_alt, null);
 
-                view = inflater.inflate(R.layout.property_layout, null);
 
-
+            final TextView availability = (TextView) view.findViewById(R.id.textView7);
+            final TextView numOfVisit = (TextView) view.findViewById(R.id.textView8);
             TextView description = (TextView) view.findViewById(R.id.description);
             TextView address = (TextView) view.findViewById(R.id.address);
-          /*  TextView totalSpots = (TextView) view.findViewById(R.id.totalAv);
-            TextView reservedSpotsNo= (TextView) view.findViewById(R.id.carspot);
-            TextView currentAvailable = (TextView) view.findViewById(R.id.cuurentAvNo);*/
-            ImageView image = (ImageView) view.findViewById(R.id.image);
+            final ImageView image = (ImageView) view.findViewById(R.id.image);
+            final Button button17 = (Button) view.findViewById(R.id.button17) ;
+            final Button button18 = (Button) view.findViewById(R.id.button18) ;
+            final Button button20 = (Button) view.findViewById(R.id.button20) ;
+            final Button button21 = (Button) view.findViewById(R.id.button21) ;
+            final ImageView img = (ImageView) view.findViewById(R.id.img) ;
 
             //set address and description
 
@@ -180,22 +198,92 @@ public class ZonesList extends AppCompatActivity  {
                 description.setText(property.getDescription());
             }
 
-            //set availability statistics
-          //  currentAvailable.setText( String.valueOf(property.getcurrentAvailableNo())+ " Parking Still available");
-            //totalSpots.setText("Total Number of spots: " + String.valueOf(property.getAvailableSpotsNo()));
-           // reservedSpotsNo.setText("Reserved parkings: " + String.valueOf(property.getEnteredCarsNo()));
-
             //get the image associated with this property
             int imageID = context.getResources().getIdentifier(property.getImage(), "drawable", context.getPackageName());
             image.setImageResource(imageID);
 
+
+
+            final List<Spot> spots;
+            spots = new ArrayList<>();
+
             final List<Property> zones;
             zones = new ArrayList<>();
+
+            DatabaseReference databaseSpots;
+            databaseSpots = FirebaseDatabase.getInstance().getReference("spots");
 
             DatabaseReference databaseZones;
             databaseZones = FirebaseDatabase.getInstance().getReference("zones");
 
-            final TextView numOfVisit = (TextView) view.findViewById(R.id.textView8);
+            databaseSpots.addValueEventListener(new ValueEventListener() {
+
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    // if(users != null)
+                    spots.clear();
+
+                    //iterating through all the nodes
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        //getting artist
+                        Spot spot = postSnapshot.getValue(Spot.class);
+                        //adding artist to the list
+                        spots.add(spot);
+                    }
+                    int count =0;
+                    for (int j = 0; j <spots.size(); j++) {
+                        if( spots.get(j).getZoneName().equals(property.getZoneName()) ){  // property.getZoneName()
+                            if(spots.get(j).getStatus() == 2){
+                                count++;
+                            }
+                        }
+                    }
+                    if(count == 1){
+                        availability.setText("Availability: 25%");
+                        button17.setBackgroundColor(Color.RED);
+                    }
+                    else if (count == 2){
+                        availability.setText("Availability: 50%");
+                        button17.setBackgroundColor(0xFFFF8516);
+                        button18.setBackgroundColor(0xFFFF8516);
+
+                    }
+                    else if(count == 3){
+                        availability.setText("Availability: 75%");
+
+                        button17.setBackgroundColor(Color.GREEN);
+                        button18.setBackgroundColor(Color.GREEN);
+                        button20.setBackgroundColor(Color.GREEN);
+                    }
+                    else if (count == 4){
+                        availability.setText("Availability: 100%");
+                       button17.setBackgroundColor(Color.GREEN);
+                        button18.setBackgroundColor(Color.GREEN);
+                        button20.setBackgroundColor(Color.GREEN);
+                        button21.setBackgroundColor(Color.GREEN);
+
+                    }
+                    else {
+                        availability.setText("Availability: 0%");
+                    /*  button17.setVisibility(view.INVISIBLE);
+                        button18.setVisibility(view.INVISIBLE);
+                        button20.setVisibility(view.INVISIBLE);
+                        button21.setVisibility(view.INVISIBLE);
+                        img.setVisibility(view.VISIBLE);*/
+
+                    }
+
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
             databaseZones.addValueEventListener(new ValueEventListener() {
 
@@ -218,7 +306,7 @@ public class ZonesList extends AppCompatActivity  {
                     for (int j = 0; j <zones.size(); j++) {
                         if( zones.get(j).getZoneName().equals(property.getZoneName()) )
                             if(zones.get(j).getCurrentlyLooking() == 0)
-                                numOfVisit.setText("No one is currently viewing this zone");
+                            numOfVisit.setText("No one is currently viewing this zone");
                             else if (zones.get(j).getCurrentlyLooking() == 1)
                                 numOfVisit.setText(zones.get(j).getCurrentlyLooking() + " person is currently viewing this zone");
                             else
@@ -235,9 +323,12 @@ public class ZonesList extends AppCompatActivity  {
             });
 
 
+
+
             return view;
         }
     }
+
 
 
 }

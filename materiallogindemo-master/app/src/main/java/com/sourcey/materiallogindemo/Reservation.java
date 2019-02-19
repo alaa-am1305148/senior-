@@ -10,7 +10,7 @@ import java.util.List;
 public class Reservation implements Serializable {
 
     int resNo ;
-    String zoneName, data ,carPlateNo , status ;
+    String zoneName, date ,carPlateNo , status ;
     double price;
     List<Integer> time;
     public Reservation() {
@@ -20,7 +20,7 @@ public class Reservation implements Serializable {
         this.resNo = resNo;
         this.carPlateNo = carPlateNo;
         this.zoneName = zoneName;
-        this.data = data;
+        this.date = data;
         this.time = time;
         this.status = status;
         this.price = price;
@@ -38,8 +38,8 @@ public class Reservation implements Serializable {
         return zoneName;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
     public List<Integer> getTime() {

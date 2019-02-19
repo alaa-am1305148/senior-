@@ -110,7 +110,7 @@ public class Choices extends AppCompatActivity {
         checkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent checkIntent = new Intent(Choices.this, Check_availability.class);
+                Intent checkIntent = new Intent(Choices.this, ZoneList2.class);
                 startActivity(checkIntent);
 
              //to be implemented
