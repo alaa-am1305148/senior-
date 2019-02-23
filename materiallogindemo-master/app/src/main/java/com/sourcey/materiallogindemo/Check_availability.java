@@ -18,11 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class Check_availability extends AppCompatActivity {
     List<Spot> spots;
     DatabaseReference databaseSpot;
     Button btn1, btn2, btn3, btn4;
-    ImageView img3, img4;
+   ImageView img4, img5, img8, img9, img7;
     String zoneName;
 
      List<Property> zones;
@@ -69,8 +71,14 @@ public class Check_availability extends AppCompatActivity {
         btn3 =(Button) findViewById(R.id.btn3);
         btn4 =(Button) findViewById(R.id.btn4);
 
-        img3 =(ImageView) findViewById(R.id.img3);
-        img4 =(ImageView) findViewById(R.id.img4);
+        img4 =(ImageView) findViewById(R.id.imageView4);
+        img5 =(ImageView) findViewById(R.id.imageView5);
+        img8 =(ImageView) findViewById(R.id.imageView8);
+        img9 =(ImageView) findViewById(R.id.imageView9);
+
+        img7 =(ImageView) findViewById(R.id.imageView7);
+        PhotoViewAttacher photoView = new PhotoViewAttacher(img7);
+        photoView.update();
 
         databaseSpot = FirebaseDatabase.getInstance().getReference("spots");
          spots = new ArrayList<>();
@@ -95,39 +103,42 @@ public class Check_availability extends AppCompatActivity {
                     if(spots.get(i).getZoneName().equals(zoneName)){
                         if(spots.get(i).getStatus() == 2)
                         {
-                      /*  if (spots.get(i).getSpotNo() == 1){
+                       if (spots.get(i).getSpotNo() == 1){
                           //  btn1.setBackgroundColor(Color.WHITE);
-
+                           img4.setVisibility(View.INVISIBLE);
 
                         }
                         if (spots.get(i).getSpotNo() == 2){
                           //  btn2.setBackgroundColor(Color.WHITE);
+                            img5.setVisibility(View.INVISIBLE);
                         }
                         if (spots.get(i).getSpotNo() == 3){
                            // btn3.setBackgroundColor(Color.WHITE);
-                            img3.setVisibility(View.INVISIBLE);
+                            img8.setVisibility(View.INVISIBLE);
 
-                        }*/
-                            if (spots.get(i).getSpotNo() == 1){
+                        }
+                            if (spots.get(i).getSpotNo() == 4){
                                 //  btn4.setBackgroundColor(Color.WHITE);
-                                img4.setVisibility(View.INVISIBLE);
+                                img9.setVisibility(View.INVISIBLE);
                             }
                         }
                         else
                         {
-                       /* if (spots.get(i).getSpotNo() == 1){
+                        if (spots.get(i).getSpotNo() == 1){
                          //   btn1.setBackgroundColor(Color.RED);
+                            img4.setVisibility(View.VISIBLE);
                         }
                         if (spots.get(i).getSpotNo() == 2){
                           //  btn2.setBackgroundColor(Color.RED);
+                            img5.setVisibility(View.VISIBLE);
                         }
                         if (spots.get(i).getSpotNo() == 3){
                           //  btn3.setBackgroundColor(Color.RED);
-                            img3.setVisibility(View.VISIBLE);
-                        }*/
-                            if (spots.get(i).getSpotNo() == 1){
+                            img8.setVisibility(View.VISIBLE);
+                        }
+                            if (spots.get(i).getSpotNo() == 4){
                                 //  btn4.setBackgroundColor(Color.RED);
-                                img4.setVisibility(View.VISIBLE);
+                               img9.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -151,7 +162,7 @@ public class Check_availability extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        for (int j = 0; j <zones.size(); j++) {
+        for (int j = 0; j < zones.size(); j++) {
             if (zones.get(j).getZoneName().equals(zoneName)) {
                 int count = zones.get(j).getCurrentlyLooking();
                 count--;

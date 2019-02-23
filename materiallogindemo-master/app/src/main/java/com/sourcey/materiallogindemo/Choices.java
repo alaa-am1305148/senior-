@@ -38,6 +38,7 @@ public class Choices extends AppCompatActivity {
         Button checkBtn = findViewById(R.id.check_btn);
         final Button reserveBtn = findViewById(R.id.reserve_btn);
         Button showReservationBtn = findViewById(R.id.show_res_btn);
+        Button requestCarCare = findViewById(R.id.car_wash_btn);
         progressBar = (ProgressBar) findViewById(R.id.progressbar1);
          progressBarText = (TextView) findViewById(R.id.progressBarinsideText1);
 
@@ -114,6 +115,17 @@ public class Choices extends AppCompatActivity {
                 startActivity(checkIntent);
 
              //to be implemented
+            }
+        });
+
+
+        requestCarCare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent checkIntent = new Intent(Choices.this, CarCare.class);
+                startActivity(checkIntent);
+
+                //to be implemented
             }
         });
 
