@@ -6,9 +6,10 @@ package com.sourcey.materiallogindemo;
 
 public class Spot {
     String   zoneName;
-    int status, spotNo;
+    int  spotNo;
+    String status;
 
-    public Spot(String zoneName, int status, int spotNo) {
+    public Spot(String zoneName, String status, int spotNo) {
         this.zoneName = zoneName;
         this.status = status;
         this.spotNo = spotNo;
@@ -21,7 +22,7 @@ public class Spot {
         return zoneName;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 

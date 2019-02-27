@@ -26,6 +26,7 @@ public class Check_availability extends AppCompatActivity {
     Button btn1, btn2, btn3, btn4;
    ImageView img4, img5, img8, img9, img7;
     String zoneName;
+    int ID;
 
      List<Property> zones;
     DatabaseReference databaseZones;
@@ -65,6 +66,7 @@ public class Check_availability extends AppCompatActivity {
         });
 
        zoneName= getIntent().getStringExtra("zoneName");
+       ID = getIntent().getIntExtra("ID",0);
 
         btn1 =(Button) findViewById(R.id.btn1);
         btn2 =(Button) findViewById(R.id.btn2);
@@ -101,7 +103,7 @@ public class Check_availability extends AppCompatActivity {
 
                 for(int i=0;  i< spots.size(); i++){
                     if(spots.get(i).getZoneName().equals(zoneName)){
-                        if(spots.get(i).getStatus() == 2)
+                        if(spots.get(i).getStatus().equals("available"))
                         {
                        if (spots.get(i).getSpotNo() == 1){
                           //  btn1.setBackgroundColor(Color.WHITE);
@@ -162,7 +164,7 @@ public class Check_availability extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        for (int j = 0; j < zones.size(); j++) {
+       /* for (int j = 0; j < zones.size(); j++) {
             if (zones.get(j).getZoneName().equals(zoneName)) {
                 int count = zones.get(j).getCurrentlyLooking();
                 count--;
@@ -190,6 +192,24 @@ public class Check_availability extends AppCompatActivity {
                 finish();
 
             }
-        }
+        }*/
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+        Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(ID);
+
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
     }
 }
