@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class User {
 
-   private  String name, plateNo , email, mobile , password ;
+   private  String name, plateNo , email, mobile , password , uid;
 
 
 
@@ -20,12 +20,13 @@ public class User {
         }
 
 
-    public User(String name, String plateNo, String email, String mobile, String password) {
+    public User(String name, String plateNo, String email, String mobile, String password, String uid) {
         this.name = name;
         this.plateNo = plateNo;
         this.email = email;
         this.mobile = mobile;
         this.password = password;
+        this.uid = uid;
     }
 
     public void setName(String name) {
@@ -66,5 +67,13 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

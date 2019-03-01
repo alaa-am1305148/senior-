@@ -16,7 +16,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
+import java.util.TimeZone;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -27,6 +30,7 @@ public class Check_availability extends AppCompatActivity {
    ImageView img4, img5, img8, img9, img7;
     String zoneName;
     int ID;
+   DatabaseReference  databaseCurrentlyLooking;
 
      List<Property> zones;
     DatabaseReference databaseZones;
@@ -64,9 +68,16 @@ public class Check_availability extends AppCompatActivity {
 
             }
         });
+        final List<CurrentlyLooking> currentlyLooking;
+        currentlyLooking = new ArrayList<>();
 
+
+        databaseCurrentlyLooking = FirebaseDatabase.getInstance().getReference("currently looking");
        zoneName= getIntent().getStringExtra("zoneName");
-       ID = getIntent().getIntExtra("ID",0);
+
+
+
+      // ID = getIntent().getIntExtra("ID",0);
 
         btn1 =(Button) findViewById(R.id.btn1);
         btn2 =(Button) findViewById(R.id.btn2);
@@ -158,6 +169,25 @@ public class Check_availability extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    protected void onStart() {
+
+        super.onStart();
+        Random r;
+        r = new Random();
+        ID = r.nextInt(1000);
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = cal.get(Calendar.MINUTE);
+
+
+        String id2 = databaseCurrentlyLooking.push().getKey();
+        CurrentlyLooking currentlyLook = new CurrentlyLooking(ID,currentHour,currentMinute, zoneName );
+        databaseCurrentlyLooking.child(id2).setValue(currentlyLook);
 
     }
 

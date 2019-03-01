@@ -140,7 +140,7 @@ public class ZoneList2 extends AppCompatActivity {
                     }
 
                 }*/
-                Random r;
+            /*    Random r;
                 r = new Random();
                 int ID = r.nextInt(1000);
                 Calendar cal = Calendar.getInstance();
@@ -152,11 +152,11 @@ public class ZoneList2 extends AppCompatActivity {
 
                 String id2 = databaseCurrentlyLooking.push().getKey();
                 CurrentlyLooking currentlyLook = new CurrentlyLooking(ID,currentHour,currentMinute, property.getZoneName() );
-                databaseCurrentlyLooking.child(id2).setValue(currentlyLook);
+                databaseCurrentlyLooking.child(id2).setValue(currentlyLook);*/
 
                 Intent intent = new Intent(ZoneList2.this, Check_availability.class);
                 intent.putExtra("zoneName", property.getZoneName());
-                intent.putExtra("ID", ID);
+             //   intent.putExtra("ID", ID);
                 startActivity(intent);
              //   startActivityForResult(intent, 1000);
             }
@@ -376,7 +376,7 @@ public class ZoneList2 extends AppCompatActivity {
                             int currentHour = cal.get(Calendar.HOUR_OF_DAY);
                             int currentMinute = cal.get(Calendar.MINUTE);
 
-                            if(currentHour == currentlyLooking.get(j).getHour() && currentMinute - currentlyLooking.get(j).getMinutes()>=5 ){
+                            if(currentHour == currentlyLooking.get(j).getHour() && currentMinute - currentlyLooking.get(j).getMinutes()>=2 ){
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
                                 Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(currentlyLooking.get(j).getID());
