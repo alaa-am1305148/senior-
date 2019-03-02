@@ -105,7 +105,7 @@ public class ShowReservations extends AppCompatActivity {
                      for (int j = 0; j < reservations4.size(); j++) {
                          String resDate = reservations4.get(j).getDate();
                          String status = reservations4.get(j).getStatus();
-                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                          Date strDate = null;
                          Date currentDate = new Date();
                          try {
@@ -174,7 +174,7 @@ public class ShowReservations extends AppCompatActivity {
 
                     uDate = getItem(p).getDate()+"";
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date strDate = null;
                     try {
                         strDate = sdf.parse(uDate);
@@ -342,7 +342,7 @@ public class ShowReservations extends AppCompatActivity {
 
                     String uDate = getItem(p).getDate()+"";
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date strDate = null;
                     try {
                         strDate = sdf.parse(uDate);

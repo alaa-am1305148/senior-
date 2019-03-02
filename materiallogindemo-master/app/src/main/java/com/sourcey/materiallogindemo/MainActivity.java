@@ -623,7 +623,18 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Log.d(TAG, " onDateSet: dd/mm/yy: " + year + "/" + month + "/" + dayOfMonth);
                 month = month + 1;
-                selectedDate = dayOfMonth + "/" + month + "/" + year;
+               String month2 = Integer.toString(month);
+               String day = Integer.toString(dayOfMonth);
+
+                if(month < 10){
+
+                    month2 = "0" + month2;
+                }
+                if(dayOfMonth < 10){
+
+                    day  = "0" + day ;
+                }
+                selectedDate = year + "-" + month2 + "-" + day;
                 mDisplayDate.setText(selectedDate);
 
                 for (int x = 0; x < fixedTimeCounter.length; x++) {
@@ -774,7 +785,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             counters[i]=0;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date strDate = null;
         try {
             strDate = sdf.parse(selectedDate);
