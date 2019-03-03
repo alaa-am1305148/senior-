@@ -9,26 +9,49 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".ShowReservations" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".Property" />
-        <activity android:name=".ZonesList" />
-        <activity android:name=".Choices" />
+            android:label="Sign in" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Reserve a Parking" />
+        <activity
+            android:name=".SignupActivity"
+            android:label="Sign up" />
+        <activity
+            android:name=".ShowReservations"
+            android:label="My Reservations" />
+        <activity
+            android:name=".ZonesList"
+            android:label="Select a Zone" />
+        <activity
+            android:name=".Choices"
+            android:label="Select a Service" />
         <activity android:name=".First" />
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Choices2" />
-        <activity android:name=".Check_availability" />
-        <activity android:name=".ZoneList2" />
-        <activity android:name=".CarCare"></activity>
+        <activity
+            android:name=".Choices2"
+            android:label="Select a Service "></activity>
+        <activity
+            android:name=".Check_availability"
+            android:label="Map" />
+        <activity
+            android:name=".ZoneList2"
+            android:label="Select a Zone" />
+        <activity
+            android:name=".CarCare"
+            android:label="Request Car Care" />
+        <activity
+            android:name=".AboutParQU"
+            android:label="About ParQu"></activity>
+        <activity android:name=".ContactUs"
+            android:label="Contact Us"></activity>
     </application>
 
 </manifest>

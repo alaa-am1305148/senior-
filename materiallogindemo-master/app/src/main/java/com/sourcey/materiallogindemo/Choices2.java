@@ -1,5 +1,6 @@
 package com.sourcey.materiallogindemo;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ public class Choices2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choices2);
+
     }
 
     public void Error (View v){

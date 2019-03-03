@@ -4,6 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
     <string-array name="starting_time">
         <item> -- Select -- </item>
         <item>07 </item>
