@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -46,7 +47,7 @@ public class ShowReservations extends AppCompatActivity {
     ListView list;
     List<Reservation> reservations;
 
-     User userLogged = Choices.user;
+    User userLogged = Choices.user;
     int endTime;
     String uDate;
 
@@ -66,7 +67,7 @@ public class ShowReservations extends AppCompatActivity {
         reservations = new ArrayList<>();
         reservations2 = new ArrayList<>();
 
-      //  if(before == false ) {
+        //  if(before == false ) {
        /*     Intent i = getIntent();
             reservations = (List<Reservation>) i.getSerializableExtra("LIST");
             reservations2.clear();
@@ -79,58 +80,58 @@ public class ShowReservations extends AppCompatActivity {
             list = (ListView) findViewById(R.id.listMenu);
             list.setAdapter(new ReservationAdapter(this, reservations2));*/
 
-      //  }
-       //if (before == true ) {
-            reservations5 = new ArrayList<>();
-            reservations4 = new ArrayList<>();
-             databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
-             databaseReservations.addValueEventListener(new ValueEventListener() {
+        //  }
+        //if (before == true ) {
+        reservations5 = new ArrayList<>();
+        reservations4 = new ArrayList<>();
+        databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
+        databaseReservations.addValueEventListener(new ValueEventListener() {
 
 
-                 @Override
-                 public void onDataChange(DataSnapshot dataSnapshot) {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                     //clearing the previous artist list
-                     // if(users != null)
-                     reservations4.clear();
+                //clearing the previous artist list
+                // if(users != null)
+                reservations4.clear();
 
-                     //iterating through all the nodes
-                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                         //getting artist
-                         Reservation reservation = postSnapshot.getValue(Reservation.class);
-                         //adding artist to the list
-                         reservations4.add(reservation);
-                     }
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Reservation reservation = postSnapshot.getValue(Reservation.class);
+                    //adding artist to the list
+                    reservations4.add(reservation);
+                }
 
-                     for (int j = 0; j < reservations4.size(); j++) {
-                         String resDate = reservations4.get(j).getDate();
-                         String status = reservations4.get(j).getStatus();
-                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                         Date strDate = null;
-                         Date currentDate = new Date();
-                         try {
-                             strDate = sdf.parse(resDate);
-                         } catch (ParseException e) {
-                             e.printStackTrace();
-                         }
-                         if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() >= currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) ) {
-                             reservations5.add(reservations4.get(j));
-                         }
-                     }
-                     list = (ListView) findViewById(R.id.listMenu);
-                     list.setAdapter(new ReservationAdapter(getApplicationContext(), reservations5));
-
-
-                 }
-                 @Override
-                 public void onCancelled(DatabaseError databaseError) {
-
-                 }
-             });
+                for (int j = 0; j < reservations4.size(); j++) {
+                    String resDate = reservations4.get(j).getDate();
+                    String status = reservations4.get(j).getStatus();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date strDate = null;
+                    Date currentDate = new Date();
+                    try {
+                        strDate = sdf.parse(resDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() >= currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) ) {
+                        reservations5.add(reservations4.get(j));
+                    }
+                }
+                list = (ListView) findViewById(R.id.listMenu);
+                list.setAdapter(new ReservationAdapter(getApplicationContext(), reservations5));
 
 
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-         }
+            }
+        });
+
+
+
+    }
 
 
     class ReservationAdapter extends ArrayAdapter<Reservation>
@@ -158,7 +159,7 @@ public class ShowReservations extends AppCompatActivity {
             ResNo.setText("Reservation No: "+getItem(p).getResNo()+"");
             date.setText("Date: "+getItem(p).getDate());
             zoneName.setText("Zone Name: "+getItem(p).getZoneName());
-             endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
+            endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
             time.setText("Time: "+getItem(p).getTime().get(0)+ " to " + endTime );
 
             extend.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +171,7 @@ public class ShowReservations extends AppCompatActivity {
                     cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
                     int currentHour = cal.get(Calendar.HOUR_OF_DAY);
                     int currentMinute = cal.get(Calendar.MINUTE);
-                    endTime = getItem(p).getTime().get(getItem(p).getTime().size()-1)+1;
+                    endTime =( getItem(p).getTime().get(getItem(p).getTime().size()-1))+1;
 
                     uDate = getItem(p).getDate()+"";
 
@@ -181,44 +182,33 @@ public class ShowReservations extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                        Date currentDate = new Date();
+                    Date currentDate = new Date();
                     // if (  currentHour == endTime-1 && currentMinute >= 30){
                     if ( endTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
                         reservations3 = new ArrayList<>();
                         databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
-                        databaseReservations.addValueEventListener(new ValueEventListener() {
 
+                                fixedTimeCounter=0;
 
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                //clearing the previous artist list
-                                // if(users != null)
-                                reservations3.clear();
-
-                                //iterating through all the nodes
-                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                    //getting artist
-                                    Reservation reservation = postSnapshot.getValue(Reservation.class);
-                                    //adding artist to the list
-                                    reservations3.add(reservation);
-                                }
-
-
-                                for (int i = 0; i < reservations3.size(); i++) {
-                                    if (reservations3.get(i).getDate().equals(getItem(p).getDate()) && reservations3.get(i).getZoneName().equals(getItem(p).getZoneName())) {
-                                        for (int j = 0; j < reservations3.get(i).getTime().size(); j++) {
-                                            if (reservations3.get(i).getTime().get(j).equals(endTime-1)) {
-                                                fixedTimeCounter++;
+                                    for (int i = 0; i < reservations4.size(); i++) {
+                                        if (reservations4.get(i).getDate().equals(getItem(p).getDate()) && reservations4.get(i).getZoneName().equals(getItem(p).getZoneName()) && !"canceled".equals(reservations4.get(i).getStatus())) {
+                                            for (int j = 0; j < reservations4.get(i).getTime().size(); j++) {
+                                                if (reservations4.get(i).getTime().get(j).equals(endTime)) {
+                                                    fixedTimeCounter++;
+                                                }
                                             }
                                         }
                                     }
-                                }
+
 
                                 if (fixedTimeCounter < 2) {
+
+
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
                                     builder.setMessage("Are you sure you want to extend this reservation to one hour");
                                     builder.setTitle("Confirmation Message");
+
+
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -228,7 +218,10 @@ public class ShowReservations extends AppCompatActivity {
                                             }
                                             time.add(endTime);
 
-                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), time, "extended", getItem(p).getPrice() + 5);
+                                            int extendedHours = getItem(p).getExtendedHours();
+                                            extendedHours = extendedHours +1;
+
+                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), time, "extended", getItem(p).getPrice() + 5 , extendedHours, getItem(p).getCancelledHours());
 
                                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -257,10 +250,21 @@ public class ShowReservations extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
 
+
                                         }
                                     });
                                     AlertDialog a = builder.create();
-                                    a.show();
+                                   // a.show();
+
+                                    try {
+
+                                            a.show();
+
+                                    }
+                                    catch (WindowManager.BadTokenException e) {
+                                        //use a log message
+                                    }
+
 
                                 }
                                 else{
@@ -271,21 +275,29 @@ public class ShowReservations extends AppCompatActivity {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.cancel();
+                                            return;
 
                                         }
                                     });
                                     AlertDialog a = builder.create();
-                                    a.show();
+                                    try {
+
+                                            a.show(); return;
+
+
+                                    }
+                                    catch (WindowManager.BadTokenException e) {
+                                        //use a log message
+                                    }
+
+
+
+
+
                                 }
 
 
 
-                            }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
 
 
 
@@ -321,7 +333,12 @@ public class ShowReservations extends AppCompatActivity {
 
                         });
                         AlertDialog a = builder.create();
-                        a.show();
+                        try {
+                            a.show(); return;
+                        }
+                        catch (WindowManager.BadTokenException e) {
+                            //use a log message
+                        }
 
                     }
                 }
@@ -351,61 +368,14 @@ public class ShowReservations extends AppCompatActivity {
                     }
                     Date currentDate = new Date();
                     // if (  currentHour == endTime-1 && currentMinute >= 30){
-               //     if ( startTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
+                    //     if ( startTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
                     int i;
                     for ( i=0; i< getItem(p).getTime().size(); i++) {
                         if ( (strDate.getDay()-currentDate.getDay() == 1 )) {
 
-                                final int index = i;
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
-                            builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
-                            builder.setTitle("Confirmation Message");
-                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-
-                                        Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
-
-                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-
-                                        Query applesQuery = ref.child("reservations").orderByChild("resNo").equalTo(getItem(p).getResNo());
-
-                                        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                                    appleSnapshot.getRef().removeValue();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                            }
-                                        });
-
-                                        String id = databaseReservations.push().getKey();
-                                        databaseReservations.child(id).setValue(reservation);
-                                        finish();
-                                    }
-                                });
-                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                        return;
-
-                                    }
-                                });
-                                AlertDialog a = builder.create();
-                                a.show();
-                                return;
-
-
-                        }
-                        else if(strDate.getDay() - currentDate.getDay() == 0 && getItem(p).getTime().get(i)- currentHour >= 1){
-
                             final int index = i;
+                            final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
                             builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
                             builder.setTitle("Confirmation Message");
@@ -414,7 +384,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5));
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours);
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -447,6 +417,64 @@ public class ShowReservations extends AppCompatActivity {
                                 }
                             });
                             AlertDialog a = builder.create();
+                            try {
+                                a.show();
+                            }
+                            catch (WindowManager.BadTokenException e) {
+                                //use a log message
+                            }
+                            return;
+
+
+                        }
+                        else if(strDate.getDay() - currentDate.getDay() == 0 && getItem(p).getTime().get(i)- currentHour >= 1){
+
+                            final int index = i;
+
+                            final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
+
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
+                            builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
+                            builder.setTitle("Confirmation Message");
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours);
+
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                                    Query applesQuery = ref.child("reservations").orderByChild("resNo").equalTo(getItem(p).getResNo());
+
+                                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                appleSnapshot.getRef().removeValue();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+
+                                    String id = databaseReservations.push().getKey();
+                                    databaseReservations.child(id).setValue(reservation);
+                                    finish();
+                                }
+                            });
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    finish();
+
+                                }
+                            });
+                            AlertDialog a = builder.create();
                             a.show();
                             return;
 
@@ -466,7 +494,12 @@ public class ShowReservations extends AppCompatActivity {
 
                             });
                             AlertDialog a = builder.create();
-                            a.show();
+                            try {
+                                a.show();
+                            }
+                            catch (WindowManager.BadTokenException e) {
+                                //use a log message
+                            }
 
                         }
                     }

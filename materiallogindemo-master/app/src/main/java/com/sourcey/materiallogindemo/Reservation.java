@@ -13,10 +13,11 @@ public class Reservation implements Serializable {
     String zoneName, date ,carPlateNo , status ;
     double price;
     List<Integer> time;
+    int extendedHours, cancelledHours;
     public Reservation() {
     }
 
-    public Reservation(int resNo, String carPlateNo, String zoneName, String data, List<Integer> time, String status, double price) {
+    public Reservation(int resNo, String carPlateNo, String zoneName, String data, List<Integer> time, String status, double price,  int extendedHours,int cancelledHours) {
         this.resNo = resNo;
         this.carPlateNo = carPlateNo;
         this.zoneName = zoneName;
@@ -24,6 +25,8 @@ public class Reservation implements Serializable {
         this.time = time;
         this.status = status;
         this.price = price;
+        this.extendedHours = extendedHours;
+        this.cancelledHours = cancelledHours;
     }
 
     public int getResNo() {
@@ -52,5 +55,21 @@ public class Reservation implements Serializable {
 
     public double getPrice() {
         return price;
+    }
+
+    public int getExtendedHours() {
+        return extendedHours;
+    }
+
+    public void setExtendedHours(int extendedHours) {
+        this.extendedHours = extendedHours;
+    }
+
+    public int getCancelledHours() {
+        return cancelledHours;
+    }
+
+    public void setCancelledHours(int cancelledHours) {
+        this.cancelledHours = cancelledHours;
     }
 }

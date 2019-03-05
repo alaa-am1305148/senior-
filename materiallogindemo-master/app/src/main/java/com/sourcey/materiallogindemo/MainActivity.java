@@ -159,93 +159,93 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                             }
                         }
 
-                    if ((3 - fixedTimeCounter[0]) <= 0) {
+                    if ((4 - fixedTimeCounter[0]) <= 0) {
                         button0.setBackgroundColor(Color.RED);
                     }
                     else
                     {
                         button0.setBackgroundColor(0xFF4383CC);
                     }
-                    if ((3 - fixedTimeCounter[1]) <= 0) {
+                    if ((4 - fixedTimeCounter[1]) <= 0) {
                         button1.setBackgroundColor(Color.RED);
                     }
                     else {
                         button1.setBackgroundColor(0xFF4383CC);
                     }
-                    if ((3 - fixedTimeCounter[2]) <= 0) {
+                    if ((4 - fixedTimeCounter[2]) <= 0) {
                         button2.setBackgroundColor(Color.RED);
                     }
                     else {
                         button2.setBackgroundColor(0xFF4383CC);
                     }
-                        if ((3 - fixedTimeCounter[3]) <= 0) {
+                        if ((4 - fixedTimeCounter[3]) <= 0) {
                             button3.setBackgroundColor(Color.RED);
                         }
                         else {
                             button3.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[4]) <= 0) {
+                        if ((4 - fixedTimeCounter[4]) <= 0) {
                             button4.setBackgroundColor(Color.RED);
                         }
                         else {
                             button4.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[5]) <= 0) {
+                        if ((4 - fixedTimeCounter[5]) <= 0) {
                             button5.setBackgroundColor(Color.RED);
                         }
                         else {
                             button5.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[6]) <= 0) {
+                        if ((4 - fixedTimeCounter[6]) <= 0) {
                             button6.setBackgroundColor(Color.RED);
                         }
                         else {
                             button6.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[7]) <= 0) {
+                        if ((4 - fixedTimeCounter[7]) <= 0) {
                             button7.setBackgroundColor(Color.RED);
                         }
                         else {
                             button7.setBackgroundColor(0xFF4383CC);
                         }
 
-                        if ((3 - fixedTimeCounter[8]) <= 0) {
+                        if ((4 - fixedTimeCounter[8]) <= 0) {
                             button8.setBackgroundColor(Color.RED);
                         }
                         else {
                             button8.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[9]) <= 0) {
+                        if ((4 - fixedTimeCounter[9]) <= 0) {
                             button9.setBackgroundColor(Color.RED);
                         }
                         else {
                             button9.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[10]) <= 0) {
+                        if ((4 - fixedTimeCounter[10]) <= 0) {
                             button10.setBackgroundColor(Color.RED);
                         }
                         else {
                             button10.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[11]) <= 0) {
+                        if ((4 - fixedTimeCounter[11]) <= 0) {
                             button11.setBackgroundColor(Color.RED);
                         }
                         else {
                             button11.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[12]) <= 0) {
+                        if ((4 - fixedTimeCounter[12]) <= 0) {
                             button12.setBackgroundColor(Color.RED);
                         }
                         else {
                             button12.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[13]) <= 0) {
+                        if ((4 - fixedTimeCounter[13]) <= 0) {
                             button13.setBackgroundColor(Color.RED);
                         }
                         else {
                             button13.setBackgroundColor(0xFF4383CC);
                         }
-                        if ((3 - fixedTimeCounter[14]) <= 0) {
+                        if ((4 - fixedTimeCounter[14]) <= 0) {
                             button14.setBackgroundColor(Color.RED);
                         }
                         else {
@@ -653,93 +653,93 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                     }
                 }
 
-                if ((3 - fixedTimeCounter[0]) <= 0) {
+                if ((4 - fixedTimeCounter[0]) <= 0) {
                     button0.setBackgroundColor(Color.RED);
                 }
                 else
                 {
                     button0.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[1]) <= 0) {
+                if ((4 - fixedTimeCounter[1]) <= 0) {
                     button1.setBackgroundColor(Color.RED);
                 }
                 else {
                     button1.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[2]) <= 0) {
+                if ((4 - fixedTimeCounter[2]) <= 0) {
                     button2.setBackgroundColor(Color.RED);
                 }
                 else {
                     button2.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[3]) <= 0) {
+                if ((4 - fixedTimeCounter[3]) <= 0) {
                     button3.setBackgroundColor(Color.RED);
                 }
                 else {
                     button3.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[4]) <= 0) {
+                if ((4 - fixedTimeCounter[4]) <= 0) {
                     button4.setBackgroundColor(Color.RED);
                 }
                 else {
                     button4.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[5]) <= 0) {
+                if ((4 - fixedTimeCounter[5]) <= 0) {
                     button5.setBackgroundColor(Color.RED);
                 }
                 else {
                     button5.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[6]) <= 0) {
+                if ((4 - fixedTimeCounter[6]) <= 0) {
                     button6.setBackgroundColor(Color.RED);
                 }
                 else {
                     button6.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[7]) <= 0) {
+                if ((4 - fixedTimeCounter[7]) <= 0) {
                     button7.setBackgroundColor(Color.RED);
                 }
                 else {
                     button7.setBackgroundColor(0xFF4383CC);
                 }
 
-                if ((3 - fixedTimeCounter[8]) <= 0) {
+                if ((4 - fixedTimeCounter[8]) <= 0) {
                     button8.setBackgroundColor(Color.RED);
                 }
                 else {
                     button8.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[9]) <= 0) {
+                if ((4 - fixedTimeCounter[9]) <= 0) {
                     button9.setBackgroundColor(Color.RED);
                 }
                 else {
                     button9.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[10]) <= 0) {
+                if ((4 - fixedTimeCounter[10]) <= 0) {
                     button10.setBackgroundColor(Color.RED);
                 }
                 else {
                     button10.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[11]) <= 0) {
+                if ((4 - fixedTimeCounter[11]) <= 0) {
                     button11.setBackgroundColor(Color.RED);
                 }
                 else {
                     button11.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[12]) <= 0) {
+                if ((4 - fixedTimeCounter[12]) <= 0) {
                     button12.setBackgroundColor(Color.RED);
                 }
                 else {
                     button12.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[13]) <= 0) {
+                if ((4 - fixedTimeCounter[13]) <= 0) {
                     button13.setBackgroundColor(Color.RED);
                 }
                 else {
                     button13.setBackgroundColor(0xFF4383CC);
                 }
-                if ((3 - fixedTimeCounter[14]) <= 0) {
+                if ((4 - fixedTimeCounter[14]) <= 0) {
                     button14.setBackgroundColor(Color.RED);
                 }
                 else {
@@ -776,7 +776,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     public void createReservation(View v ){
 
         int resNo =  r.nextInt(1000);
-          reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5);
+          reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0);
 
         List<Integer> count = new ArrayList<>();
 
@@ -864,7 +864,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             for(int i=0; i<counters.length ; i++){
 
-                if ((3-counters[i]) <= 0){
+                if ((4-counters[i]) <= 0){
                     exist = false;
                     //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
                     //   Toast.LENGTH_LONG).show();
@@ -890,7 +890,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             }
         }
-        else{
+  /*      else{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("You can not register at this time");
@@ -905,7 +905,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             a.show();
 
             return;
-        }
+        }*/
 
 
 
@@ -944,7 +944,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
        int totalReservationHours = 0;
         for (int i =0; i< reservations.size(); i++) {
             if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getDate().equals(selectedDate)) {
-                totalReservationHours += reservations.get(i).getTime().size();
+                totalReservationHours +=( reservations.get(i).getTime().size() - reservations.get(i).getExtendedHours() - reservations.get(i).getCancelledHours());
             }
         }
         if( (totalReservationHours + Integer.parseInt(hours)) > 6){
