@@ -18,6 +18,8 @@ public class ContactUs extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_us);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         name = (EditText) findViewById(R.id.editText);
         email = (EditText) findViewById(R.id.editText2);
         message = (EditText) findViewById(R.id.editText3);

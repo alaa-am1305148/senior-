@@ -40,6 +40,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 

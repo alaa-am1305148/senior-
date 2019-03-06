@@ -13,6 +13,7 @@ public class CarCare extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_care);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void carWash (View v){

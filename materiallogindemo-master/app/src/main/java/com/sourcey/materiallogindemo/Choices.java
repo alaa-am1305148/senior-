@@ -33,6 +33,9 @@ public class Choices extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choices);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
         users = new ArrayList<>();
         Button checkBtn = findViewById(R.id.check_btn);

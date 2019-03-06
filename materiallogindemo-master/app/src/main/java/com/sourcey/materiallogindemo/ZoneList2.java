@@ -41,7 +41,7 @@ public class ZoneList2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zone_list3);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         final List<Property> zones;

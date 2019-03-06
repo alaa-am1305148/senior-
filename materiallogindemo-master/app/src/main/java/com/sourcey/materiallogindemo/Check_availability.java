@@ -39,6 +39,7 @@ public class Check_availability extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_availability_2);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         zones = new ArrayList<>();
         databaseZones = FirebaseDatabase.getInstance().getReference("zones");

@@ -64,6 +64,8 @@ public class ShowReservations extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reservation_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         reservations = new ArrayList<>();
         reservations2 = new ArrayList<>();
 

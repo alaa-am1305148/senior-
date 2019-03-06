@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picker);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         zones = new ArrayList<>();
         databaseZones = FirebaseDatabase.getInstance().getReference("zones");
