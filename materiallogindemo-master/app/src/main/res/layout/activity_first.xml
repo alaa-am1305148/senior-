@@ -23,12 +23,12 @@
                 android:layout_marginStart="140dp"
                 android:layout_marginTop="38dp"
                 android:src="@drawable/logo3"
-                app:layout_constraintBottom_toTopOf="@+id/normal_btn"
+                app:layout_constraintBottom_toTopOf="@+id/btnMap"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/normal_btn"
+                android:id="@+id/btnMap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="19dp"
@@ -65,7 +65,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/normal_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/btnMap" />
 
         </android.support.constraint.ConstraintLayout>
 

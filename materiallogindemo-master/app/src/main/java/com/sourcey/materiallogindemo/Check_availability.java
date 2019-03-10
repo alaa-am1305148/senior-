@@ -1,13 +1,20 @@
 package com.sourcey.materiallogindemo;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,12 +35,17 @@ public class Check_availability extends AppCompatActivity {
     DatabaseReference databaseSpot;
     Button btn1, btn2, btn3, btn4;
    ImageView img4, img5, img8, img9, img7;
-    String zoneName;
+    String zoneName, spotNum;
     int ID;
    DatabaseReference  databaseCurrentlyLooking;
 
      List<Property> zones;
     DatabaseReference databaseZones;
+    Spinner spinner1;
+
+    private static final String TAG = "Check_availability";
+
+    private static final int ERROR_DIALOG_REQUEST = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +55,17 @@ public class Check_availability extends AppCompatActivity {
 
         zones = new ArrayList<>();
         databaseZones = FirebaseDatabase.getInstance().getReference("zones");
+
+
+         spinner1 = findViewById(R.id.SpotSpinner);
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,R.array.spot_numbers,android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner1.setAdapter(adapter1);
+
+       // spotNum = spinner1.getSelectedItem().toString();
+
+
+
 
         databaseZones.addValueEventListener(new ValueEventListener() {
 
@@ -171,7 +194,51 @@ public class Check_availability extends AppCompatActivity {
             }
         });
 
+        if(isServicesOK()){
+            init();
+        }
+
     }
+
+    private void init(){
+        Button btnMap = (Button) findViewById(R.id.btnMap);
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spotNum = spinner1.getSelectedItem().toString();
+                Intent intent = new Intent(Check_availability.this, MapActivity.class);
+                intent.putExtra("zoneName", zoneName);
+                intent.putExtra("spotNum",spotNum);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(Check_availability.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(Check_availability.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+
+
 
     protected void onStart() {
 

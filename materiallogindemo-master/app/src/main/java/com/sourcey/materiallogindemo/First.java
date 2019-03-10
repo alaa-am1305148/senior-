@@ -6,15 +6,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class First extends AppCompatActivity {
 private DrawerLayout mDrawerLayout;
@@ -32,7 +26,7 @@ private ActionBarDrawerToggle mToggle;
 
         // conitne a s vip or normal
 
-        final Button normalBtn = findViewById(R.id.normal_btn);
+        final Button normalBtn = findViewById(R.id.btnMap);
         Button vipBtn = findViewById(R.id.vip_btn);
 
 

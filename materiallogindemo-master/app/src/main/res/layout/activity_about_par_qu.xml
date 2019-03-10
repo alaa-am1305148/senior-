@@ -10,7 +10,7 @@
 
 
     <Button
-        android:id="@+id/normal_btn"
+        android:id="@+id/btnMap"
         android:layout_width="300dp"
         android:layout_height="370dp"
 
@@ -32,9 +32,9 @@
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/normal_btn"
-        android:layout_alignLeft="@+id/normal_btn"
-        android:layout_alignStart="@+id/normal_btn"
+        android:layout_alignBottom="@+id/btnMap"
+        android:layout_alignLeft="@+id/btnMap"
+        android:layout_alignStart="@+id/btnMap"
         android:layout_marginBottom="11dp"
         android:layout_marginLeft="48dp"
         android:layout_marginStart="48dp"
