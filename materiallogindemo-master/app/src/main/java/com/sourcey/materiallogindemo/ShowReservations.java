@@ -223,7 +223,7 @@ public class ShowReservations extends AppCompatActivity {
                                             int extendedHours = getItem(p).getExtendedHours();
                                             extendedHours = extendedHours +1;
 
-                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), time, "extended", getItem(p).getPrice() + 5 , extendedHours, getItem(p).getCancelledHours());
+                                            Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), time, "extended", getItem(p).getPrice() + 5 , extendedHours, getItem(p).getCancelledHours(), getItem(p).getUid());
 
                                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -386,7 +386,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours);
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours,getItem(p).getUid() );
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -444,7 +444,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours);
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 

@@ -274,12 +274,16 @@ public class ZoneList2 extends AppCompatActivity {
                     if(count == 1){
                         availability.setText("Availability: 25%");
                         button17.setBackgroundColor(Color.RED);
+                        button18.setBackgroundColor(0xffd6d7d7);//gray
+                        button20.setBackgroundColor(0xffd6d7d7);//gray
+                        button21.setBackgroundColor(0xffd6d7d7);//gray
                     }
                     else if (count == 2){
                         availability.setText("Availability: 50%");
                         button17.setBackgroundColor(0xFFFF8516);
                         button18.setBackgroundColor(0xFFFF8516);
-
+                        button20.setBackgroundColor(0xffd6d7d7);
+                        button21.setBackgroundColor(0xffd6d7d7);
                     }
                     else if(count == 3){
                         availability.setText("Availability: 75%");
@@ -287,6 +291,7 @@ public class ZoneList2 extends AppCompatActivity {
                         button17.setBackgroundColor(Color.GREEN);
                         button18.setBackgroundColor(Color.GREEN);
                         button20.setBackgroundColor(Color.GREEN);
+                        button21.setBackgroundColor(0xffd6d7d7);
                     }
                     else if (count == 4){
                         availability.setText("Availability: 100%");
@@ -298,11 +303,10 @@ public class ZoneList2 extends AppCompatActivity {
                     }
                     else {
                         availability.setText("Availability: 0%");
-                    /*  button17.setVisibility(view.INVISIBLE);
-                        button18.setVisibility(view.INVISIBLE);
-                        button20.setVisibility(view.INVISIBLE);
-                        button21.setVisibility(view.INVISIBLE);
-                        img.setVisibility(view.VISIBLE);*/
+                        button17.setBackgroundColor(0xffd6d7d7);
+                        button18.setBackgroundColor(0xffd6d7d7);//gray
+                        button20.setBackgroundColor(0xffd6d7d7);//gray
+                        button21.setBackgroundColor(0xffd6d7d7);//gray
 
                     }
 

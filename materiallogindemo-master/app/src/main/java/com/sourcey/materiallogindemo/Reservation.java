@@ -10,14 +10,14 @@ import java.util.List;
 public class Reservation implements Serializable {
 
     int resNo ;
-    String zoneName, date ,carPlateNo , status ;
+    String zoneName, date ,carPlateNo , status, uid ;
     double price;
     List<Integer> time;
     int extendedHours, cancelledHours;
     public Reservation() {
     }
 
-    public Reservation(int resNo, String carPlateNo, String zoneName, String data, List<Integer> time, String status, double price,  int extendedHours,int cancelledHours) {
+    public Reservation(int resNo, String carPlateNo, String zoneName, String data, List<Integer> time, String status, double price,  int extendedHours,int cancelledHours, String uid) {
         this.resNo = resNo;
         this.carPlateNo = carPlateNo;
         this.zoneName = zoneName;
@@ -27,6 +27,7 @@ public class Reservation implements Serializable {
         this.price = price;
         this.extendedHours = extendedHours;
         this.cancelledHours = cancelledHours;
+        this.uid = uid ;
     }
 
     public int getResNo() {
@@ -71,5 +72,9 @@ public class Reservation implements Serializable {
 
     public void setCancelledHours(int cancelledHours) {
         this.cancelledHours = cancelledHours;
+    }
+
+    public String getUid() {
+        return uid;
     }
 }

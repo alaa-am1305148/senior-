@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListner;
 
-    String zoneName;
+    String zoneName, uid ;
 
     List<Property> zones;
     DatabaseReference databaseZones;
@@ -776,7 +776,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     public void createReservation(View v ){
 
         int resNo =  r.nextInt(1000);
-          reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0);
+          reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0, userLogged.getUid());
 
         List<Integer> count = new ArrayList<>();
 
