@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     List<User> users;
     List<Reservation> reservations;
     DatabaseReference databaseUsers, databaseReservations;
+
     String email, plateNo;
     TextView text;
     Button button0, button1, button2, button3, button4, button5 , button6, button7, button8 , button9, button10, button11 , button12, button13, button14 , button15;
@@ -778,6 +780,8 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         int resNo =  r.nextInt(1000);
           reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0, userLogged.getUid());
 
+
+
         List<Integer> count = new ArrayList<>();
 
         int [] counters = new int[ time.size()] ;
@@ -972,9 +976,11 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                statisticUpdate(selectedDate, startTime, hours);
                 String id = databaseReservations.push().getKey();
                 databaseReservations.child(id).setValue(reservation);
                 finish();
+
                 Intent toChoices = new Intent(MainActivity.this, Choices.class);
                 //   toLoginIntent.putExtra("plateNo", plateNo);
                 startActivity(toChoices);
@@ -1015,39 +1021,120 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
     }
 
-    protected void onStop() {
-        super.onStop();
+//    protected void onStop() {
+//        super.onStop();
+//
+//        for (int j = 0; j <zones.size(); j++) {
+//            if (zones.get(j).getZoneName().equals(zoneName)) {
+//                int count = zones.get(j).getCurrentlyLooking();
+//                count--;
+//                Property zone = new Property(zones.get(j).getZoneName(), count, zones.get(j).getTotalSpotsNo());
+//
+//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+//
+//                Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
+//
+//                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+//                            appleSnapshot.getRef().removeValue();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                    }
+//                });
+//
+//                String id2 = databaseZones.push().getKey();
+//                databaseZones.child(id2).setValue(zone);
+//                finish();
+//
+//            }
+//        }
+//    }
+    public void statisticUpdate (String selectedDate,String startTime,String hours){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ArrayList<History> history = new ArrayList<>() ;
+        ArrayList<historyInfoPerDay> info = new ArrayList<>();
+
 
         for (int j = 0; j <zones.size(); j++) {
-            if (zones.get(j).getZoneName().equals(zoneName)) {
-                int count = zones.get(j).getCurrentlyLooking();
-                count--;
-                Property zone = new Property(zones.get(j).getZoneName(), count, zones.get(j).getTotalSpotsNo());
+            if (zones.get(j).getZoneName().equals(zoneName))
+            {
+                for (int i =0; i< zones.get(j).getHistory().size(); i++){
+                    List<Integer> userHours = arrayOfTime(startTime,hours);
+                    SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd");
+                    Date dt1= null;
+                    try {
+                        dt1 = format1.parse(selectedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DateFormat format2=new SimpleDateFormat("EE");
+                    String finalDay=format2.format(dt1);
+                    if (zones.get(j).getHistory().get(i).getDay().equals(finalDay) )
+                    {
+                        for (int k =0 ; k < zones.get(j).getHistory().get(i).getInfo().size(); k++) {
+                            boolean flage = false ;
+                            for(int l=0; l< userHours.size(); l++) {
+                                if (userHours.get(l) == Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getHour())) {
+                                    int countNew = zones.get(j).getHistory().get(i).getInfo().get(k).getCount() + 1;
+                                    flage = true;
+                                    if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate() != null) {
+                                        if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate().contains(selectedDate)) {
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew,zones.get(j).getHistory().get(i).getInfo().get(k).getDate() ));
+                                        } else {
+                                            ArrayList<String> dates = zones.get(j).getHistory().get(i).getInfo().get(k).getDate();
+                                            dates.add(selectedDate);
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                        }
+                                    } else {
+                                        ArrayList<String> dates = new ArrayList<>();
+                                        dates.add(selectedDate);
+                                        info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                    }
+                                }
+                            }
 
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                            if (flage == false){
+                                info.add(zones.get(j).getHistory().get(i).getInfo().get(k));
+                            }
 
-                Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
-
-                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                            appleSnapshot.getRef().removeValue();
                         }
+
+                        history.add(new History(finalDay, info));
+
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    else{
+                        history.add(zones.get(j).getHistory().get(i));
                     }
-                });
-
-                String id2 = databaseZones.push().getKey();
-                databaseZones.child(id2).setValue(zone);
-                finish();
-
+                }
             }
         }
-    }
 
+        Property property= new Property(zoneName,4,history);
+
+        Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
+
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        String id = databaseZones.push().getKey();
+        databaseZones.child(id).setValue(property);
+        finish();
+
+    }
 
 }

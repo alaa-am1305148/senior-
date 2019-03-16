@@ -3,32 +3,33 @@ package com.sourcey.materiallogindemo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public  class Property  {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public  class Property implements Serializable {
 
     //property basics
 
     private String zoneName;
-    private int currentlyLooking;
     private String description;
     private String image;
     private int totalSpotsNo; // the total number of available spot in this zone
-
+    private ArrayList<History> history;
 
     //constructor
 
 
-    public Property(String zoneName, int currentlyLooking, String description, String image, int totalSpotsNo) {
+    public Property(String zoneName, String description, String image, int totalSpotsNo) {
         this.zoneName = zoneName;
-        this.currentlyLooking = currentlyLooking;
         this.description = description;
         this.image = image;
         this.totalSpotsNo = totalSpotsNo;
     }
 
-    public Property(String zoneName, int currentlyLooking, int totalSpotsNo) {
+    public Property(String zoneName, int totalSpotsNo, ArrayList<History> history) {
         this.zoneName = zoneName;
-        this.currentlyLooking = currentlyLooking;
         this.totalSpotsNo = totalSpotsNo;
+        this.history = history;
     }
 
     public Property() {
@@ -53,13 +54,16 @@ public  class Property  {
         return zoneName;
     }
 
-    public int getCurrentlyLooking() {
-        return currentlyLooking;
-    }
 
     public int getTotalSpotsNo() {
         return totalSpotsNo;
     }
 
+    public ArrayList<History> getHistory() {
+        return history;
+    }
 
+    public void setHistory(ArrayList<History> history) {
+        this.history = history;
+    }
 }

@@ -85,10 +85,10 @@ public class ZoneList2 extends AppCompatActivity {
 
         //create our property elements
 
-        zoneProperties.add(new Property("CENG Female Zone", 0,"College of Engineering - Female (C07)","property_image_1", 4));
-        zoneProperties.add(new Property("CAAS Female Zone", 0,"College of Art and Science - Female (C01)","property_image_2", 4));
-        zoneProperties.add(new Property("CENG Male Zone", 0,"College of Engineering - Male (BCR)","property_image_3", 4));
-        zoneProperties.add(new Property("BNK Male Zone", 0,"Bank/Ibn Khaldoon Hall - Male (B11)","property_image_4", 4));
+        zoneProperties.add(new Property("CENG Female Zone","College of Engineering - Female (C07)","property_image_1", 4));
+        zoneProperties.add(new Property("CAAS Female Zone","College of Art and Science - Female (C01)","property_image_2", 4));
+        zoneProperties.add(new Property("CENG Male Zone","College of Engineering - Male (BCR)","property_image_3", 4));
+        zoneProperties.add(new Property("BNK Male Zone","Bank/Ibn Khaldoon Hall - Male (B11)","property_image_4", 4));
 
         //create our new array adapter
         ArrayAdapter<Property> adapter = new propertyArrayAdapter(this, 0, zoneProperties);

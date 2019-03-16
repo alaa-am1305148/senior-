@@ -10,6 +10,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 public class First extends AppCompatActivity {
 private DrawerLayout mDrawerLayout;
 private ActionBarDrawerToggle mToggle;
@@ -17,6 +27,67 @@ private ActionBarDrawerToggle mToggle;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+
+
+
+//
+//       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Calendar cal = Calendar.getInstance();
+//        String date1 =  dateFormat.format(cal.getTime());
+
+/*
+        ArrayList<String> date = new ArrayList<String>();
+//       date.add(date1);
+       ArrayList<historyInfoPerDay> info = new ArrayList<historyInfoPerDay>();
+
+        info.add(new historyInfoPerDay("6", 0, date));
+        info.add(new historyInfoPerDay("7", 0, date));
+        info.add(new historyInfoPerDay("8", 0, date));
+        info.add(new historyInfoPerDay("9", 0, date));
+        info.add(new historyInfoPerDay("10", 0, date));
+        info.add(new historyInfoPerDay("11", 0, date));
+        info.add(new historyInfoPerDay("12", 0, date));
+        info.add(new historyInfoPerDay("13", 0, date));
+        info.add(new historyInfoPerDay("14", 0, date));
+        info.add(new historyInfoPerDay("15", 0, date));
+        info.add(new historyInfoPerDay("16", 0, date));
+        info.add(new historyInfoPerDay("17", 0, date));
+        info.add(new historyInfoPerDay("18", 0, date));
+        info.add(new historyInfoPerDay("19", 0, date));
+        info.add(new historyInfoPerDay("20", 0, date));
+        info.add(new historyInfoPerDay("21", 0, date));
+        info.add(new historyInfoPerDay("22", 0, date));
+
+
+            //    { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
+        History sun = new History( "Sun", info);
+        History mon = new History( "Mon",info );
+        History tue = new History( "Tue",info);
+        History wed = new History("Wed",info);
+        History thu = new History("Thu",info);
+        History fri = new History( "Fri",info);
+        History sat = new History( "Sat",info);
+
+      //  History[] history = {sun, mon, tue, wed, thu, fri, sat};
+        ArrayList<History> histories = new ArrayList<History>();
+        histories.add(sun);
+        histories.add(mon);
+        histories.add(tue);
+        histories.add(wed);
+        histories.add(thu);
+        histories.add(fri);
+        histories.add(sat);
+
+
+        Property zone = new Property("CAAS Female Zone", 4, histories);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseZones = database.getReference("zones");
+        String id = databaseZones.push().getKey();
+        databaseZones.child(id).setValue(zone);
+       */
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);

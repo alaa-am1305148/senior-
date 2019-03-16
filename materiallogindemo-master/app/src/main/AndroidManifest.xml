@@ -89,7 +89,22 @@
             android:value="AIzaSyDXg_vw3rHfm8doZ8kLuYwDbZqcNCSmFeU" />
 
         <activity android:name=".MapActivity" />
-        <activity android:name=".PaymentActivity"></activity>
+        <activity android:name=".PayActivity" />
+        <activity android:name=".PaymentDetails" />
+
+        <service
+            android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false" />
+
+        <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+        <activity
+            android:name="io.card.payment.CardIOActivity"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name="io.card.payment.DataEntryActivity" />
+        <activity android:name=".HistoryActivity"></activity>
     </application>
 
 </manifest>
