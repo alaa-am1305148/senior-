@@ -66,6 +66,8 @@
         android:background="@drawable/rounded_button"
         android:text="History Data"
         android:textAllCaps="false"
-        android:textColor="@color/common_google_signin_btn_text_dark_default" />
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 </RelativeLayout>

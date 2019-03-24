@@ -105,6 +105,7 @@
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
         <activity android:name=".HistoryActivity"></activity>
+        <receiver android:name=".AlarmNotificationReceiver"/>
     </application>
 
 </manifest>

@@ -10,8 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,14 +33,29 @@ private ActionBarDrawerToggle mToggle;
         setContentView(R.layout.activity_first);
 
 
+    /*    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
+        Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo("CBAE Female & Male Zone");
+
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });*/
 //
 //       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Calendar cal = Calendar.getInstance();
 //        String date1 =  dateFormat.format(cal.getTime());
 
-/*
-        ArrayList<String> date = new ArrayList<String>();
+
+  /*  ArrayList<String> date = new ArrayList<String>();
 //       date.add(date1);
        ArrayList<historyInfoPerDay> info = new ArrayList<historyInfoPerDay>();
 
@@ -80,14 +99,14 @@ private ActionBarDrawerToggle mToggle;
         histories.add(sat);
 
 
-        Property zone = new Property("CAAS Female Zone", 4, histories);
+        Property zone = new Property("CBAE Female & Male Zone", 4, histories);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseZones = database.getReference("zones");
         String id = databaseZones.push().getKey();
         databaseZones.child(id).setValue(zone);
-       */
 
+*/
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);

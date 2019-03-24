@@ -86,7 +86,7 @@ public class HistoryActivity extends AppCompatActivity {
                                             int count = zones.get(i).getHistory().get(j).getInfo().get(h).getCount();
                                             if(zones.get(i).getHistory().get(j).getInfo().get(h).getDate() != null){
                                                 int countDays = zones.get(i).getHistory().get(j).getInfo().get(h).getDate().size();
-                                                int percent = count/(countDays*4);
+                                                float percent = (float)count/(countDays*4);
                                                 percentage.add(new BarEntry(percent*100, h));
                                             }
                                             else{
@@ -133,8 +133,8 @@ public class HistoryActivity extends AppCompatActivity {
                         //  setContentView(chart2);
                         BarData data = new BarData(hours, bardataset);
                         chart.setData(data); // set the data and list of lables into chart
-                        chart.setScaleEnabled(true);
-                        chart.setDragEnabled(true);
+//                        chart.setScaleEnabled(true);
+//                        chart.setDragEnabled(true);
 
 
 

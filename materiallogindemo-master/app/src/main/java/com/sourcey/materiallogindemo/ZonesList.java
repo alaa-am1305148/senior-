@@ -28,7 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ZonesList extends AppCompatActivity  {
 
@@ -205,42 +207,6 @@ public class ZonesList extends AppCompatActivity  {
 
             final TextView numOfVisit = (TextView) view.findViewById(R.id.textView8);
 
-//            databaseZones.addValueEventListener(new ValueEventListener() {
-//
-//
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                    //clearing the previous artist list
-//                    // if(users != null)
-//                    zones.clear();
-//
-//                    //iterating through all the nodes
-//                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                        //getting artist
-//                        Property zone = postSnapshot.getValue(Property.class);
-//                        //adding artist to the list
-//                        zones.add(zone);
-//                    }
-////                    int count =0;
-////                    for (int j = 0; j <zones.size(); j++) {
-////                        if( zones.get(j).getZoneName().equals(property.getZoneName()) )
-////                            if(zones.get(j).getCurrentlyLooking() == 0)
-////                                numOfVisit.setText("No one is currently viewing this zone");
-////                            else if (zones.get(j).getCurrentlyLooking() == 1)
-////                                numOfVisit.setText(zones.get(j).getCurrentlyLooking() + " person is currently viewing this zone");
-////                            else
-////                                numOfVisit.setText(zones.get(j).getCurrentlyLooking() + " people are currently viewing this zone");
-////
-////
-////                    }
-////
-//                }
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -253,6 +219,101 @@ public class ZonesList extends AppCompatActivity  {
                     //to be implemented
                 }
             });
+
+            final List<CurrentlyLooking> currentlyLooking;
+            currentlyLooking = new ArrayList<>();
+            final DatabaseReference  databaseCurrentlyLooking;
+            databaseCurrentlyLooking = FirebaseDatabase.getInstance().getReference("currently looking");
+
+            databaseCurrentlyLooking.addValueEventListener(new ValueEventListener() {
+
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    //clearing the previous artist list
+                    // if(users != null)
+                    currentlyLooking.clear();
+
+                    //iterating through all the nodes
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        //getting artist
+                        CurrentlyLooking current = postSnapshot.getValue(CurrentlyLooking.class);
+                        //adding artist to the list
+                        currentlyLooking.add(current);
+                    }
+
+                    for (int j = 0; j <currentlyLooking.size(); j++) {
+                        if( currentlyLooking.get(j).getZoneName().equals(property.getZoneName()) ){
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+                            int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+                            int currentMinute = cal.get(Calendar.MINUTE);
+
+                            if(currentHour == currentlyLooking.get(j).getHour() && currentMinute - currentlyLooking.get(j).getMinutes()>=2 ){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                                Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(currentlyLooking.get(j).getID());
+
+                                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                            }
+                            else if (currentHour > currentlyLooking.get(j).getHour()){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                                Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(currentlyLooking.get(j).getID());
+
+                                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                            appleSnapshot.getRef().removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+
+                    int count =0;
+                    for (int j = 0; j <currentlyLooking.size(); j++) {
+                        if( currentlyLooking.get(j).getZoneName().equals(property.getZoneName()) ){
+                            count++;
+                        }
+
+                    }
+                    if(count == 0)
+                        numOfVisit.setText("No one is currently viewing this zone");
+                    else if (count  == 1)
+                        numOfVisit.setText(count + " person is currently viewing this zone");
+                    else
+                        numOfVisit.setText(count + " people are currently viewing this zone");
+
+
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
 
             return view;
         }

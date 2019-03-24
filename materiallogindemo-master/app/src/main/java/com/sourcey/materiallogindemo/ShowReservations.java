@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -46,10 +47,13 @@ import static android.support.v7.widget.RecyclerView.*;
 public class ShowReservations extends AppCompatActivity {
     ListView list;
     List<Reservation> reservations;
+    List<Property> zones;
+    DatabaseReference databaseZones;
 
     User userLogged = Choices.user;
     int endTime;
     String uDate;
+    int flage = 0;
 
     List<Reservation> reservations2;
     DatabaseReference  databaseReservations;
@@ -68,6 +72,7 @@ public class ShowReservations extends AppCompatActivity {
 
         reservations = new ArrayList<>();
         reservations2 = new ArrayList<>();
+
 
         //  if(before == false ) {
        /*     Intent i = getIntent();
@@ -214,6 +219,42 @@ public class ShowReservations extends AppCompatActivity {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+
+                                            zones = new ArrayList<>();
+                                            databaseZones = FirebaseDatabase.getInstance().getReference("zones");
+
+                                            databaseZones.addValueEventListener(new ValueEventListener() {
+
+
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                     flage = flage + 1;
+                                                    //clearing the previous artist list
+                                                    // if(users != null)
+                                                    zones.clear();
+
+                                                    //iterating through all the nodes
+                                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                        //getting artist
+                                                        Property zone = postSnapshot.getValue(Property.class);
+                                                        //adding artist to the list
+                                                        zones.add(zone);
+                                                    }
+                                                    if(flage == 1)
+                                                    statisticUpdate(getItem(p).getDate(),endTime , getItem(p).getZoneName());
+                                                    else{
+                                                        return;
+                                                    }
+                                                }
+
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+
                                             List<Integer> time = new ArrayList<>();
                                             for (int i = 0; i < getItem(p).getTime().size(); i++) {
                                                 time.add(getItem(p).getTime().get(i));
@@ -241,6 +282,7 @@ public class ShowReservations extends AppCompatActivity {
                                                 public void onCancelled(DatabaseError databaseError) {
                                                 }
                                             });
+
 
                                             String id = databaseReservations.push().getKey();
                                             databaseReservations.child(id).setValue(reservation);
@@ -515,6 +557,93 @@ public class ShowReservations extends AppCompatActivity {
 
         }
     }
+
+
+    public void statisticUpdate (final String selectedDate, final int time, final String zoneName) {
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        final ArrayList<History> history = new ArrayList<>();
+        final ArrayList<historyInfoPerDay> info = new ArrayList<>();
+        history.clear();
+        info.clear();
+
+         for (int j = 0; j < zones.size(); j++) {
+                if (zones.get(j).getZoneName().equals(zoneName)) {
+                    for (int i = 0; i < zones.get(j).getHistory().size(); i++) {
+
+                        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                        Date dt1 = null;
+                        try {
+                            dt1 = format1.parse(selectedDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        DateFormat format2 = new SimpleDateFormat("EE");
+                        String finalDay = format2.format(dt1);
+                        if (zones.get(j).getHistory().get(i).getDay().equals(finalDay)) {
+                            for (int k = 0; k < zones.get(j).getHistory().get(i).getInfo().size(); k++) {
+
+
+                                if (time == Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getHour())) {
+                                    int countNew = zones.get(j).getHistory().get(i).getInfo().get(k).getCount() + 1;
+
+
+
+                                    if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate() != null) {
+                                        if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate().contains(selectedDate)) {
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew,zones.get(j).getHistory().get(i).getInfo().get(k).getDate() ));
+                                        } else {
+                                            ArrayList<String> dates = zones.get(j).getHistory().get(i).getInfo().get(k).getDate();
+                                            dates.add(selectedDate);
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                        }
+                                    } else {
+                                        ArrayList<String> dates = new ArrayList<>();
+                                        dates.add(selectedDate);
+                                        info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                    }
+
+
+                                   // info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, zones.get(j).getHistory().get(i).getInfo().get(k).getDate()));
+
+                                } else {
+                                    info.add(zones.get(j).getHistory().get(i).getInfo().get(k));
+                                }
+
+
+                            }
+
+                            history.add(new History(finalDay, info));
+
+                        } else {
+                            history.add(zones.get(j).getHistory().get(i));
+                        }
+                    }
+                }
+            }
+            Property property= new Property(zoneName,4,history);
+
+            Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
+
+                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                        appleSnapshot.getRef().removeValue();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+            String id = databaseZones.push().getKey();
+                databaseZones.child(id).setValue(property);
+            finish();
+
+
+
+        }
 
 
 }

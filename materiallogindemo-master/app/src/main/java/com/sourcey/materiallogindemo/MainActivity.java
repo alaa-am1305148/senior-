@@ -1,12 +1,19 @@
 package com.sourcey.materiallogindemo;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +45,11 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements android.widget.AdapterView.OnItemSelectedListener{
 
+    ArrayList<History> history;
+    ArrayList<historyInfoPerDay> info;
+    int ID;
+    DatabaseReference  databaseCurrentlyLooking;
+    int resNo;
     String startTime ;
      String hours ;
     List<User> users;
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         setContentView(R.layout.activity_picker);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        databaseCurrentlyLooking = FirebaseDatabase.getInstance().getReference("currently looking");
         zones = new ArrayList<>();
         databaseZones = FirebaseDatabase.getInstance().getReference("zones");
 
@@ -766,21 +779,13 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //attaching value event listener
 
-      // text.setText(plateNo);
-
-    }
 
     public void createReservation(View v ){
 
-        int resNo =  r.nextInt(1000);
+         resNo =  r.nextInt(1000);
+
           reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0, userLogged.getUid());
-
-
 
         List<Integer> count = new ArrayList<>();
 
@@ -822,7 +827,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             for(int i=0; i<counters.length ; i++){
 
-                if ((3-counters[i]) <= 0){
+                if ((4-counters[i]) <= 0){
                     exist = false;
                     //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
                     //   Toast.LENGTH_LONG).show();
@@ -976,7 +981,13 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Notification notification = buildNotification( reservation);
+                scheduleNotification(notification, selectedDate,startTime,hours,reservation);
+
+
                 statisticUpdate(selectedDate, startTime, hours);
+                //deleteNotification(reservation);
+
                 String id = databaseReservations.push().getKey();
                 databaseReservations.child(id).setValue(reservation);
                 finish();
@@ -1056,9 +1067,10 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 //    }
     public void statisticUpdate (String selectedDate,String startTime,String hours){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        ArrayList<History> history = new ArrayList<>() ;
-        ArrayList<historyInfoPerDay> info = new ArrayList<>();
-
+        history = new ArrayList<>() ;
+        info = new ArrayList<>();
+        history.clear();
+        info.clear();
 
         for (int j = 0; j <zones.size(); j++) {
             if (zones.get(j).getZoneName().equals(zoneName))
@@ -1134,7 +1146,156 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         String id = databaseZones.push().getKey();
         databaseZones.child(id).setValue(property);
         finish();
+        return;
 
+    }
+
+
+
+@Override
+    protected void onStart() {
+
+        super.onStart();
+        Random r;
+        r = new Random();
+        ID = r.nextInt(1000);
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = cal.get(Calendar.MINUTE);
+
+
+        String id2 = databaseCurrentlyLooking.push().getKey();
+        CurrentlyLooking currentlyLook = new CurrentlyLooking(ID,currentHour,currentMinute, zoneName );
+        databaseCurrentlyLooking.child(id2).setValue(currentlyLook);
+
+    }
+
+    protected void onStop() {
+        super.onStop();
+
+       /* for (int j = 0; j < zones.size(); j++) {
+            if (zones.get(j).getZoneName().equals(zoneName)) {
+                int count = zones.get(j).getCurrentlyLooking();
+                count--;
+                Property zone = new Property(zones.get(j).getZoneName(), count, zones.get(j).getTotalSpotsNo());
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
+
+                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                            appleSnapshot.getRef().removeValue();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+                String id2 = databaseZones.push().getKey();
+                databaseZones.child(id2).setValue(zone);
+                finish();
+
+            }
+        }*/
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+        Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(ID);
+
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
+
+
+    private void scheduleNotification(Notification notification, String date, String startTime, String hours, Reservation reservation) {
+
+        Intent intent = new Intent(this, AlarmNotificationReceiver.class);
+        intent.putExtra(AlarmNotificationReceiver.NOTIF_ID, 1);
+        intent.putExtra(AlarmNotificationReceiver.NOTIF, notification);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, reservation.getResNo(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //convert assignment date string, subtract 1 day to be used in notification
+        String[] dueDate = reservation.getDate().split("-");
+        Calendar calendar = Calendar.getInstance();
+        int hour = (Integer.parseInt(startTime)+ Integer.parseInt(hours))-1;
+        calendar.set(Integer.valueOf(dueDate[0]), (Integer.valueOf(dueDate[1]) - 1), Integer.valueOf(dueDate[2]), (Integer.parseInt(startTime)+ Integer.parseInt(hours))-1,30, 0);
+
+        //subtract one day
+
+
+        long futureInMillis = calendar.getTimeInMillis();
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date strDate = null;
+        try {
+            strDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+
+    }
+
+    private Notification buildNotification(Reservation reservation) {
+         final long[] mVibratePattern = { 0, 200, 200, 300 };
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("default",
+                    "Studyr",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Studyr app notification channel");
+            mNotificationManager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
+               .setSmallIcon(R.drawable.ic_notifications) // notification icon
+                .setContentTitle("Warning") // title for notification
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentText("Reservation No "+ reservation.getResNo() + " is due after 30 minutes")// message for notification
+                .setAutoCancel(true)
+                .setVibrate(mVibratePattern); // clear notification after click
+
+
+        //to open activity when clicking on notification
+        Intent intent = new Intent(getApplicationContext(), First.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, reservation.getResNo(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setShowWhen(false);
+        //mNotificationManager.notify(0, mBuilder.build());
+        return mBuilder.build();
+    }
+
+    private void deleteNotification(Reservation reservation) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getApplicationContext(), AlarmNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, reservation.getResNo(), intent, 0);
+        alarmManager.cancel(pendingIntent);
     }
 
 }
