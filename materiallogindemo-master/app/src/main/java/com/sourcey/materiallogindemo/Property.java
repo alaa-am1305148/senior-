@@ -63,6 +63,22 @@ public  class Property implements Serializable {
         return history;
     }
 
+    public void setTotalSpotsNo(int totalSpotsNo) {
+        this.totalSpotsNo = totalSpotsNo;
+    }
+
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public void setHistory(ArrayList<History> history) {
         this.history = history;
     }

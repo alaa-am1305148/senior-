@@ -12,9 +12,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="27dp"
             tools:layout_editor_absoluteX="180dp"
             tools:layout_editor_absoluteY="282dp" />
+
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bargraph"
@@ -22,7 +23,7 @@
             android:layout_height="400dp"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/SpotSpinner"
-            android:layout_marginTop="24dp"></com.github.mikephil.charting.charts.BarChart>
+            android:layout_marginTop="17dp"></com.github.mikephil.charting.charts.BarChart>
 
 
 

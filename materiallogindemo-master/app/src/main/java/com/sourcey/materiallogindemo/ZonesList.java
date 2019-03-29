@@ -35,7 +35,9 @@ import java.util.TimeZone;
 public class ZonesList extends AppCompatActivity  {
 
     private ArrayList<Property> zoneProperties = new ArrayList<>();
-     List<Property> zones;
+    static List<Property> zones;
+   static List<Reservation> reservations;
+    DatabaseReference  databaseReservations;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,32 @@ public class ZonesList extends AppCompatActivity  {
                     zones.add(zone);
                 }
                 // int count =0;
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        reservations = new ArrayList<>();
+        databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
+        databaseReservations.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous artist list
+                // if(users != null)
+                reservations.clear();
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    Reservation reservation = postSnapshot.getValue(Reservation.class);
+                    //adding artist to the list
+                    reservations.add(reservation);
+                }
+
 
             }
             @Override
@@ -199,11 +227,11 @@ public class ZonesList extends AppCompatActivity  {
             int imageID = context.getResources().getIdentifier(property.getImage(), "drawable", context.getPackageName());
             image.setImageResource(imageID);
 
-            final List<Property> zones;
-            zones = new ArrayList<>();
-
-            DatabaseReference databaseZones;
-            databaseZones = FirebaseDatabase.getInstance().getReference("zones");
+//            final List<Property> zones;
+//            zones = new ArrayList<>();
+//
+//            DatabaseReference databaseZones;
+//            databaseZones = FirebaseDatabase.getInstance().getReference("zones");
 
             final TextView numOfVisit = (TextView) view.findViewById(R.id.textView8);
 
@@ -213,7 +241,8 @@ public class ZonesList extends AppCompatActivity  {
                 public void onClick(View view) {
                     Intent i = new Intent(ZonesList.this,HistoryActivity.class);
                     i.putExtra("zoneName", property.getZoneName());
-                    i.putExtra("zones", (Serializable) zones);
+                  // i.putExtra("reservations", (Serializable) reservations);
+                   // i.putExtra("zones", (Serializable) zones);
                     startActivity(i);
 
                     //to be implemented

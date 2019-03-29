@@ -9,10 +9,10 @@ import java.util.Date;
 
 public class historyInfoPerDay {
     String hour;
-    int count;
+    String count;
     ArrayList<String> date;
 
-    public historyInfoPerDay(String hour, int count, ArrayList<String> date) {
+    public historyInfoPerDay(String hour, String count, ArrayList<String> date) {
         this.hour = hour;
         this.count = count;
         this.date = date;
@@ -29,11 +29,11 @@ public class historyInfoPerDay {
         this.hour = hour;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
 

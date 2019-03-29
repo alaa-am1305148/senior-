@@ -1092,20 +1092,20 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                             boolean flage = false ;
                             for(int l=0; l< userHours.size(); l++) {
                                 if (userHours.get(l) == Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getHour())) {
-                                    int countNew = zones.get(j).getHistory().get(i).getInfo().get(k).getCount() + 1;
+                                    int countNew = Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getCount()) + 1;
                                     flage = true;
                                     if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate() != null) {
                                         if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate().contains(selectedDate)) {
-                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew,zones.get(j).getHistory().get(i).getInfo().get(k).getDate() ));
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew)  ,zones.get(j).getHistory().get(i).getInfo().get(k).getDate() ));
                                         } else {
                                             ArrayList<String> dates = zones.get(j).getHistory().get(i).getInfo().get(k).getDate();
                                             dates.add(selectedDate);
-                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew), dates));
                                         }
                                     } else {
                                         ArrayList<String> dates = new ArrayList<>();
                                         dates.add(selectedDate);
-                                        info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), countNew, dates));
+                                        info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew), dates));
                                     }
                                 }
                             }

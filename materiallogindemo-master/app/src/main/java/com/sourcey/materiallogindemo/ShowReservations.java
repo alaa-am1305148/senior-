@@ -55,6 +55,7 @@ public class ShowReservations extends AppCompatActivity {
     String uDate;
     int flage = 0;
 
+    String status;
     List<Reservation> reservations2;
     DatabaseReference  databaseReservations;
     int  fixedTimeCounter = 0;
@@ -121,7 +122,10 @@ public class ShowReservations extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() >= currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) ) {
+                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() > currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) && ! (status.equals("subCanceled"))) {
+                        reservations5.add(reservations4.get(j));
+                    }
+                   else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1)+1 && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) && ! (status.equals("subCanceled"))) {
                         reservations5.add(reservations4.get(j));
                     }
                 }
@@ -240,8 +244,10 @@ public class ShowReservations extends AppCompatActivity {
                                                         //adding artist to the list
                                                         zones.add(zone);
                                                     }
-                                                    if(flage == 1)
-                                                    statisticUpdate(getItem(p).getDate(),endTime , getItem(p).getZoneName());
+                                                    if(flage == 1){
+
+                                                    }
+                                                  //  statisticUpdate(getItem(p).getDate(),endTime , getItem(p).getZoneName());
                                                     else{
                                                         return;
                                                     }
@@ -477,6 +483,15 @@ public class ShowReservations extends AppCompatActivity {
 
                             final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
 
+                            if ( getItem(p).getTime().get(i) == getItem(p).getTime().get(0)){
+                                status = "canceled";
+                            }
+                            else
+                            {
+                                status = "subCanceled";
+
+                            }
+
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
                             builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
@@ -486,7 +501,9 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
+
+
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), status, ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -559,7 +576,8 @@ public class ShowReservations extends AppCompatActivity {
     }
 
 
-    public void statisticUpdate (final String selectedDate, final int time, final String zoneName) {
+ /*   public void statisticUpdate (final String selectedDate, final int time, final String zoneName)
+    {
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         final ArrayList<History> history = new ArrayList<>();
         final ArrayList<historyInfoPerDay> info = new ArrayList<>();
@@ -643,7 +661,7 @@ public class ShowReservations extends AppCompatActivity {
 
 
 
-        }
+        }*/
 
 
 }
