@@ -49,6 +49,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         zones = new ArrayList<>();
       info = new ArrayList<>();
         databaseZones = FirebaseDatabase.getInstance().getReference("zones");
@@ -97,8 +98,11 @@ public class HistoryActivity extends AppCompatActivity {
 //          zones = (List<Property>) intent.getSerializableExtra("zones");
 //          int size = zones.size();
 //        reservations = (List<Reservation>) intent.getSerializableExtra("zones");
-        reservations = ZonesList.reservations;
-        zones= ZonesList.zones;
+     //   reservations = ZonesList.reservations;
+        zones= zoneForHistogram.zones;
+        if (zones == null){
+            zones= zoneForHistogram2.zones;
+        }
 
         chart =(BarChart) findViewById(R.id.bargraph);
        // chart.setNoDataText("Click to View");
@@ -114,26 +118,33 @@ public class HistoryActivity extends AppCompatActivity {
                 for (int i =0; i< zones.size(); i++){
                   //  percentage.clear();
                     if (zones.get(i).getZoneName().equals(zoneName)){
-                        for(int j=0; j< zones.get(i).getHistory().size(); j++){
-                            if (zones.get(i).getHistory().get(j).getDay().equals(selectedItem)){
+                        for(int j=0; j< zones.get(i).getStatistics().size(); j++){
+                            if (zones.get(i).getStatistics().get(j).getDay().equals(selectedItem)){
 
                                // int size = zones.get(i).getHistory().get(j).getInfo().size();
 
 
-                                for (int h=0; h< zones.get(i).getHistory().get(j).getInfo().size(); h++ ){
+                                for (int h=0; h< zones.get(i).getStatistics().get(j).getHoursInfo().size(); h++ ){
 
-                                    if(zones.get(i).getHistory().get(j).getInfo().get(h).getDate() != null){
+                                    int count =0 ;
+                                    for (int k=0; k< zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().size(); k++ ){
+                                        count = count + zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().get(k);
+                                    }
+                                    float percent = (float)count/16;
+                                    percentage.add(new BarEntry(percent*100, h));
+
+                                  /*  if(zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate() != null){
                                    // int count = zones.get(i).getHistory().get(j).getInfo().get(h).getCount();
-                                    int size = zones.get(i).getHistory().get(j).getInfo().get(h).getDate().size();
-                                    Collections.sort(zones.get(i).getHistory().get(j).getInfo().get(h).getDate());
+                                    int size = zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate().size();
+                                    Collections.sort(zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate());
                                     if(size >=2) {
-                                        String date1 = zones.get(i).getHistory().get(j).getInfo().get(h).getDate().get(size - 1);
-                                        String date2 = zones.get(i).getHistory().get(j).getInfo().get(h).getDate().get(size - 2);
+                                        String date1 = zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate().get(size - 1);
+                                        String date2 = zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate().get(size - 2);
                                         int count=0 ;
                                         for (int l =0; l< reservations.size(); l++){
                                             if (reservations.get(l).getDate().equals(date1) || reservations.get(l).getDate().equals(date2)){
                                                 for(int y=0; y<reservations.get(l).getTime().size(); y++){
-                                                    if (Integer.toString(reservations.get(l).getTime().get(y)).equals(zones.get(i).getHistory().get(j).getInfo().get(h).getHour() )){
+                                                    if (Integer.toString(reservations.get(l).getTime().get(y)).equals(zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getHour() )){
                                                         count++;
                                                     }
                                                 }
@@ -146,12 +157,12 @@ public class HistoryActivity extends AppCompatActivity {
                                         percentage.add(new BarEntry(percent*100, h));
                                     }
                                     else{
-                                        String date1 = zones.get(i).getHistory().get(j).getInfo().get(h).getDate().get(size - 1);
+                                        String date1 = zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getDate().get(size - 1);
                                         int count=0 ;
                                         for (int l =0; l< reservations.size(); l++){
                                             if (reservations.get(l).getDate().equals(date1) ){
                                                 for(int y=0; y<reservations.get(l).getTime().size(); y++){
-                                                    if (Integer.toString(reservations.get(l).getTime().get(y)).equals(zones.get(i).getHistory().get(j).getInfo().get(h).getHour() )){
+                                                    if (Integer.toString(reservations.get(l).getTime().get(y)).equals(zones.get(i).getStatistics().get(j).getHoursInfo().get(h).getHour() )){
                                                         count++;
                                                     }
                                                 }
@@ -169,7 +180,7 @@ public class HistoryActivity extends AppCompatActivity {
                                         percentage.add(new BarEntry(0, h));
                                     }
 
-
+*/
                                 }
 
                             }

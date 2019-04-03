@@ -1,7 +1,6 @@
 package com.sourcey.materiallogindemo;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +40,7 @@ public class Choices extends AppCompatActivity {
         Button checkBtn = findViewById(R.id.check_btn);
         final Button reserveBtn = findViewById(R.id.reserve_btn);
         Button showReservationBtn = findViewById(R.id.show_res_btn);
-        Button payBtn = findViewById(R.id.pay_btn);
+        Button trendBtn = findViewById(R.id.Trend_btn);
         Button requestCarCare = findViewById(R.id.car_wash_btn);
         progressBar = (ProgressBar) findViewById(R.id.progressbar1);
          progressBarText = (TextView) findViewById(R.id.progressBarinsideText1);
@@ -122,10 +121,10 @@ public class Choices extends AppCompatActivity {
             }
         });
 
-        payBtn.setOnClickListener(new View.OnClickListener() {
+        trendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent checkIntent = new Intent(Choices.this, PayActivity.class);
+                Intent checkIntent = new Intent(Choices.this,zoneForHistogram.class);
                 startActivity(checkIntent);
 
                 //to be implemented

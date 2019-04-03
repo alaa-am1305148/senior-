@@ -49,11 +49,16 @@ public class ShowReservations extends AppCompatActivity {
     List<Reservation> reservations;
     List<Property> zones;
     DatabaseReference databaseZones;
+    List<Integer> time = new ArrayList<>() ;
 
     User userLogged = Choices.user;
     int endTime;
     String uDate;
     int flage = 0;
+
+
+    ArrayList<Statistics> history;
+    ArrayList<historyInfoPerDay> info;
 
     String status;
     List<Reservation> reservations2;
@@ -122,10 +127,10 @@ public class ShowReservations extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() > currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) && ! (status.equals("subCanceled"))) {
+                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() > currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("cancel1ed")) && ! (status.equals("subcancel1ed"))) {
                         reservations5.add(reservations4.get(j));
                     }
-                   else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1)+1 && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("canceled")) && ! (status.equals("subCanceled"))) {
+                   else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1)+1 && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("cancelled")) && ! (status.equals("subcancelled"))) {
                         reservations5.add(reservations4.get(j));
                     }
                 }
@@ -202,7 +207,7 @@ public class ShowReservations extends AppCompatActivity {
                                 fixedTimeCounter=0;
 
                                     for (int i = 0; i < reservations4.size(); i++) {
-                                        if (reservations4.get(i).getDate().equals(getItem(p).getDate()) && reservations4.get(i).getZoneName().equals(getItem(p).getZoneName()) && !"canceled".equals(reservations4.get(i).getStatus())) {
+                                        if (reservations4.get(i).getDate().equals(getItem(p).getDate()) && reservations4.get(i).getZoneName().equals(getItem(p).getZoneName()) && !"cancelled".equals(reservations4.get(i).getStatus())) {
                                             for (int j = 0; j < reservations4.get(i).getTime().size(); j++) {
                                                 if (reservations4.get(i).getTime().get(j).equals(endTime)) {
                                                     fixedTimeCounter++;
@@ -245,9 +250,9 @@ public class ShowReservations extends AppCompatActivity {
                                                         zones.add(zone);
                                                     }
                                                     if(flage == 1){
-
+                                                        statisticUpdate(getItem(p).getDate(), endTime, getItem(p).getZoneName());
                                                     }
-                                                  //  statisticUpdate(getItem(p).getDate(),endTime , getItem(p).getZoneName());
+
                                                     else{
                                                         return;
                                                     }
@@ -434,7 +439,7 @@ public class ShowReservations extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "canceled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours,getItem(p).getUid() );
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "cancelled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours,getItem(p).getUid() );
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -484,11 +489,11 @@ public class ShowReservations extends AppCompatActivity {
                             final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
 
                             if ( getItem(p).getTime().get(i) == getItem(p).getTime().get(0)){
-                                status = "canceled";
+                                status = "cancelled";
                             }
                             else
                             {
-                                status = "subCanceled";
+                                status = "subcancelled";
 
                             }
 
@@ -662,6 +667,99 @@ public class ShowReservations extends AppCompatActivity {
 
 
         }*/
+ public List<Integer> arrayOfTime (int startTime , int hours){
+     time.clear();
+//     int startTime1 = Integer.parseInt(startTime) ;
+//     int hours1 = Integer.parseInt(hours) ;
+
+     for (int i= 0 ; i< hours ; i++){
+         time.add(startTime + i);
+
+     }
+     return time ;
+ }
+
+
+    public void statisticUpdate (String selectedDate,int endTime, String zoneName){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        history = new ArrayList<>() ;
+        info = new ArrayList<>();
+        history.clear();
+        info.clear();
+
+        for (int j = 0; j <zones.size(); j++) {
+            if (zones.get(j).getZoneName().equals(zoneName))
+            {
+                for (int i =0; i< zones.get(j).getStatistics().size(); i++){
+                   // List<Integer> userHours = arrayOfTime(startTime,hours);
+                    SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd");
+                    Date dt1= null;
+                    try {
+                        dt1 = format1.parse(selectedDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    DateFormat format2=new SimpleDateFormat("EE");
+                    String finalDay=format2.format(dt1);
+                    if (zones.get(j).getStatistics().get(i).getDay().equals(finalDay) )
+                    {
+                        for (int k =0 ; k < zones.get(j).getStatistics().get(i).getHoursInfo().size(); k++) {
+                            boolean flage = false ;
+
+                                if (endTime == Integer.parseInt(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour())) {
+
+                                    //String[] parts = zones.get(j).getHistory().get(i).getInfo().get(k).getCount().split("-");
+                                    flage = true;
+
+                                        ArrayList<Integer> countNew = zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getCount();
+                                            int index = zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate().indexOf(selectedDate);
+                                            countNew.set(index, countNew.get(index)+1);
+                                            info.add(new historyInfoPerDay(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour(), countNew  ,zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate() ));
+
+
+                                }
+
+
+                            if (flage == false){
+                                info.add(zones.get(j).getStatistics().get(i).getHoursInfo().get(k));
+                            }
+
+                        }
+
+                        history.add(new Statistics(finalDay, info));
+
+                    }
+                    else{
+                        history.add(zones.get(j).getStatistics().get(i));
+                    }
+                }
+            }
+        }
+
+        Property property= new Property(zoneName,4,history);
+
+        Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
+
+        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        String id = databaseZones.push().getKey();
+        databaseZones.child(id).setValue(property);
+        finish();
+        return;
+
+    }
+
 
 
 }

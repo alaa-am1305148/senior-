@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -45,7 +46,7 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements android.widget.AdapterView.OnItemSelectedListener{
 
-    ArrayList<History> history;
+    ArrayList<Statistics> history;
     ArrayList<historyInfoPerDay> info;
     int ID;
     DatabaseReference  databaseCurrentlyLooking;
@@ -1075,7 +1076,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         for (int j = 0; j <zones.size(); j++) {
             if (zones.get(j).getZoneName().equals(zoneName))
             {
-                for (int i =0; i< zones.get(j).getHistory().size(); i++){
+                for (int i =0; i< zones.get(j).getStatistics().size(); i++){
                     List<Integer> userHours = arrayOfTime(startTime,hours);
                     SimpleDateFormat format1=new SimpleDateFormat("yyyy-MM-dd");
                     Date dt1= null;
@@ -1086,41 +1087,67 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                     }
                     DateFormat format2=new SimpleDateFormat("EE");
                     String finalDay=format2.format(dt1);
-                    if (zones.get(j).getHistory().get(i).getDay().equals(finalDay) )
+                    if (zones.get(j).getStatistics().get(i).getDay().equals(finalDay) )
                     {
-                        for (int k =0 ; k < zones.get(j).getHistory().get(i).getInfo().size(); k++) {
+                        for (int k =0 ; k < zones.get(j).getStatistics().get(i).getHoursInfo().size(); k++) {
                             boolean flage = false ;
                             for(int l=0; l< userHours.size(); l++) {
-                                if (userHours.get(l) == Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getHour())) {
-                                    int countNew = Integer.parseInt(zones.get(j).getHistory().get(i).getInfo().get(k).getCount()) + 1;
+                                if (userHours.get(l) == Integer.parseInt(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour())) {
+
+                                    //String[] parts = zones.get(j).getHistory().get(i).getInfo().get(k).getCount().split("-");
                                     flage = true;
-                                    if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate() != null) {
-                                        if (zones.get(j).getHistory().get(i).getInfo().get(k).getDate().contains(selectedDate)) {
-                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew)  ,zones.get(j).getHistory().get(i).getInfo().get(k).getDate() ));
+                                    if (zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate() != null && zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getCount()!= null) {
+                                        ArrayList<Integer> countNew = zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getCount();
+                                        if (zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate().contains(selectedDate)) {
+                                            int index = zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate().indexOf(selectedDate);
+                                            countNew.set(index, countNew.get(index)+1);
+                                            info.add(new historyInfoPerDay(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour(), countNew  ,zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate() ));
                                         } else {
-                                            ArrayList<String> dates = zones.get(j).getHistory().get(i).getInfo().get(k).getDate();
-                                            dates.add(selectedDate);
-                                            info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew), dates));
+                                            ArrayList<String> dates = zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getDate();
+                                            //Collections.sort(dates);
+
+                                            dates.set(0,dates.get(1));
+                                            dates.set(1,dates.get(2));
+                                            dates.set(2,dates.get(3));
+                                            dates.set(3, selectedDate);
+
+                                            countNew.set(0, countNew.get(1));
+                                            countNew.set(1, countNew.get(2));
+                                            countNew.set(2, countNew.get(3));
+                                            countNew.set(3, 1);
+                                            /*if (dates.size()<4){
+                                                dates.add(selectedDate);
+                                                int index = dates.indexOf(selectedDate);
+                                                countNew.add(1);
+                                            }
+                                            else{
+                                                dates.set(0, selectedDate);
+                                                countNew.set(0,1);
+                                            }*/
+
+                                            info.add(new historyInfoPerDay(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour(), countNew, dates));
                                         }
                                     } else {
+                                        ArrayList<Integer> countNew = new ArrayList<>();
                                         ArrayList<String> dates = new ArrayList<>();
                                         dates.add(selectedDate);
-                                        info.add(new historyInfoPerDay(zones.get(j).getHistory().get(i).getInfo().get(k).getHour(), Integer.toString(countNew), dates));
+                                        countNew.add(1);
+                                        info.add(new historyInfoPerDay(zones.get(j).getStatistics().get(i).getHoursInfo().get(k).getHour(), countNew, dates));
                                     }
                                 }
                             }
 
                             if (flage == false){
-                                info.add(zones.get(j).getHistory().get(i).getInfo().get(k));
+                                info.add(zones.get(j).getStatistics().get(i).getHoursInfo().get(k));
                             }
 
                         }
 
-                        history.add(new History(finalDay, info));
+                        history.add(new Statistics(finalDay, info));
 
                     }
                     else{
-                        history.add(zones.get(j).getHistory().get(i));
+                        history.add(zones.get(j).getStatistics().get(i));
                     }
                 }
             }

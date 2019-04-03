@@ -35,7 +35,10 @@ public class Choices2 extends AppCompatActivity {
     public void checkAvailability(View view) {
         Intent checkIntent = new Intent(Choices2.this, ZoneList2.class);
         startActivity(checkIntent);
-
         //to be implemented
+    }
+    public void occupancyTrend(View view) {
+        Intent checkIntent = new Intent(Choices2.this, zoneForHistogram2.class);
+        startActivity(checkIntent);
     }
 }

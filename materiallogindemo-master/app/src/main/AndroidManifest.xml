@@ -104,8 +104,20 @@
             android:name="io.card.payment.CardIOActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
-        <activity android:name=".HistoryActivity"></activity>
-        <receiver android:name=".AlarmNotificationReceiver"/>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="Current Occupancy Trend"
+            android:parentActivityName=".zoneForHistogram" />
+
+        <receiver android:name=".AlarmNotificationReceiver" />
+
+        <activity
+            android:name=".zoneForHistogram"
+            android:label="Select a Zone"
+            android:parentActivityName=".Choices"></activity>
+        <activity android:name=".zoneForHistogram2"
+            android:label="Select a Zone"
+            android:parentActivityName=".Choices2"></activity>
     </application>
 
 </manifest>

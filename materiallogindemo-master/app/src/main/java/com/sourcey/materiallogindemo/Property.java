@@ -14,7 +14,7 @@ public  class Property implements Serializable {
     private String description;
     private String image;
     private int totalSpotsNo; // the total number of available spot in this zone
-    private ArrayList<History> history;
+    private ArrayList<Statistics> statistics;
 
     //constructor
 
@@ -26,10 +26,10 @@ public  class Property implements Serializable {
         this.totalSpotsNo = totalSpotsNo;
     }
 
-    public Property(String zoneName, int totalSpotsNo, ArrayList<History> history) {
+    public Property(String zoneName, int totalSpotsNo, ArrayList<Statistics> statistics) {
         this.zoneName = zoneName;
         this.totalSpotsNo = totalSpotsNo;
-        this.history = history;
+        this.statistics = statistics;
     }
 
     public Property() {
@@ -59,9 +59,7 @@ public  class Property implements Serializable {
         return totalSpotsNo;
     }
 
-    public ArrayList<History> getHistory() {
-        return history;
-    }
+
 
     public void setTotalSpotsNo(int totalSpotsNo) {
         this.totalSpotsNo = totalSpotsNo;
@@ -79,7 +77,11 @@ public  class Property implements Serializable {
         this.image = image;
     }
 
-    public void setHistory(ArrayList<History> history) {
-        this.history = history;
+    public ArrayList<Statistics> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(ArrayList<Statistics> statistics) {
+        this.statistics = statistics;
     }
 }
