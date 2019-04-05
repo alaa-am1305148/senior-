@@ -86,7 +86,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 progressBarText.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     String id = databaseUsers.push().getKey();
-                    User user = new User(name, plateNo , email, mobile , password, uid);
+                    String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    User user = new User(name, plateNo , email, mobile , currentuser, uid);
 
                     databaseUsers.child(id).setValue(user);
 

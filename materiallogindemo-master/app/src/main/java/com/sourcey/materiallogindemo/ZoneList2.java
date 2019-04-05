@@ -273,32 +273,32 @@ public class ZoneList2 extends AppCompatActivity {
                     }
                     if(count == 1){
                         availability.setText("Availability: 25%");
-                        button17.setBackgroundColor(Color.RED);
+                        button17.setBackgroundColor(0xFFDB0101);
                         button18.setBackgroundColor(0xffd6d7d7);//gray
                         button20.setBackgroundColor(0xffd6d7d7);//gray
                         button21.setBackgroundColor(0xffd6d7d7);//gray
                     }
                     else if (count == 2){
                         availability.setText("Availability: 50%");
-                        button17.setBackgroundColor(0xFFFF8516);
-                        button18.setBackgroundColor(0xFFFF8516);
+                        button17.setBackgroundColor(0xFFF77824);
+                        button18.setBackgroundColor(0xFFF77824);
                         button20.setBackgroundColor(0xffd6d7d7);
                         button21.setBackgroundColor(0xffd6d7d7);
                     }
                     else if(count == 3){
                         availability.setText("Availability: 75%");
 
-                        button17.setBackgroundColor(Color.GREEN);
-                        button18.setBackgroundColor(Color.GREEN);
-                        button20.setBackgroundColor(Color.GREEN);
+                        button17.setBackgroundColor(0xFF00AA4A);
+                        button18.setBackgroundColor(0xFF00AA4A);
+                        button20.setBackgroundColor(0xFF00AA4A);
                         button21.setBackgroundColor(0xffd6d7d7);
                     }
                     else if (count == 4){
                         availability.setText("Availability: 100%");
-                       button17.setBackgroundColor(Color.GREEN);
-                        button18.setBackgroundColor(Color.GREEN);
-                        button20.setBackgroundColor(Color.GREEN);
-                        button21.setBackgroundColor(Color.GREEN);
+                       button17.setBackgroundColor(0xFF00AA4A);
+                        button18.setBackgroundColor(0xFF00AA4A);
+                        button20.setBackgroundColor(0xFF00AA4A);
+                        button21.setBackgroundColor(0xFF00AA4A);
 
                     }
                     else {

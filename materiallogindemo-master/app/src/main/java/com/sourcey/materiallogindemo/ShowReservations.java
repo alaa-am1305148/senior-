@@ -250,7 +250,7 @@ public class ShowReservations extends AppCompatActivity {
                                                         zones.add(zone);
                                                     }
                                                     if(flage == 1){
-                                                        statisticUpdate(getItem(p).getDate(), endTime, getItem(p).getZoneName());
+                                                    //    statisticUpdate(getItem(p).getDate(), endTime, getItem(p).getZoneName());
                                                     }
 
                                                     else{
