@@ -148,6 +148,12 @@ public class ShowReservations extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, Choices.class);
+        startActivity(intent);
+        super.onBackPressed();
+    }
 
 
     class ReservationAdapter extends ArrayAdapter<Reservation>
@@ -298,6 +304,7 @@ public class ShowReservations extends AppCompatActivity {
                                             String id = databaseReservations.push().getKey();
                                             databaseReservations.child(id).setValue(reservation);
                                             finish();
+
                                         }
                                     });
                                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -467,7 +474,7 @@ public class ShowReservations extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
-                                    return;
+
 
                                 }
                             });
@@ -478,7 +485,7 @@ public class ShowReservations extends AppCompatActivity {
                             catch (WindowManager.BadTokenException e) {
                                 //use a log message
                             }
-                            return;
+
 
 
                         }
@@ -542,7 +549,6 @@ public class ShowReservations extends AppCompatActivity {
                             });
                             AlertDialog a = builder.create();
                             a.show();
-                            return;
 
                         }
                         else {

@@ -201,7 +201,7 @@ public class ZonesList extends AppCompatActivity  {
             TextView reservedSpotsNo= (TextView) view.findViewById(R.id.carspot);
             TextView currentAvailable = (TextView) view.findViewById(R.id.cuurentAvNo);*/
             ImageView image = (ImageView) view.findViewById(R.id.image);
-            Button button = (Button) view.findViewById(R.id.button);
+
 
 
 
@@ -236,18 +236,18 @@ public class ZonesList extends AppCompatActivity  {
             final TextView numOfVisit = (TextView) view.findViewById(R.id.textView8);
 
 
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(ZonesList.this,HistoryActivity.class);
-                    i.putExtra("zoneName", property.getZoneName());
-                  // i.putExtra("reservations", (Serializable) reservations);
-                   // i.putExtra("zones", (Serializable) zones);
-                    startActivity(i);
-
-                    //to be implemented
-                }
-            });
+//            button .setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent i = new Intent(ZonesList.this,HistoryActivity.class);
+//                    i.putExtra("zoneName", property.getZoneName());
+//                  // i.putExtra("reservations", (Serializable) reservations);
+//                   // i.putExtra("zones", (Serializable) zones);
+//                    startActivity(i);
+//
+//                    //to be implemented
+//                }
+//            });
 
             final List<CurrentlyLooking> currentlyLooking;
             currentlyLooking = new ArrayList<>();

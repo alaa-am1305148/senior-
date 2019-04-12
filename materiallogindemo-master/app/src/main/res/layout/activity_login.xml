@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="No account yet? Create one"
+            android:text="New to ParQU? Join now"
             android:textSize="16dip" />
 
     </LinearLayout>

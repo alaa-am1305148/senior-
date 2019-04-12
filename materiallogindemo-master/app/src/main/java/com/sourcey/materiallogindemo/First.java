@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,32 +24,35 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class First extends AppCompatActivity {
 private DrawerLayout mDrawerLayout;
 private ActionBarDrawerToggle mToggle;
+
+    static List<Property> zones;
+    static List<Spot> spots;
+    static List<User> users;
+    static List<Reservation> reservations;
+    static List<CurrentlyLooking> currentlyLookings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
 
 
-    /*    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
-        Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo("CBAE Female & Male Zone");
+        long startTime = System.nanoTime();
+        DatabaseReference databaseSpot;
+        databaseSpot = FirebaseDatabase.getInstance().getReference("spots");
+        String id = databaseSpot.push().getKey();
+        Spot spot = new Spot ("BNK Male Zone","available",1);
+        databaseSpot.child(id).setValue(spot);
+        long endTime = System.nanoTime();
+        Log.i("Time", "Post spot took "+(endTime - startTime) + " ns" );
+        //////////////////////////////////////////////////////////////////////////////////////////
 
-        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    appleSnapshot.getRef().removeValue();
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });*/
 //
 //       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Calendar cal = Calendar.getInstance();
@@ -109,6 +113,10 @@ private ActionBarDrawerToggle mToggle;
 */
 
 
+
+
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
@@ -159,7 +167,10 @@ private ActionBarDrawerToggle mToggle;
                                 Intent i2 = new Intent(First.this, ContactUs.class);
                                 startActivity(i2);
                                 break;
-
+                            case R.id.nav_moreInfo:
+                                Intent i3 = new Intent(First.this, ContactUs.class);
+                                startActivity(i3);
+                                break;
                             case R.id.nav_shareThisApp:
 
                                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -179,6 +190,38 @@ private ActionBarDrawerToggle mToggle;
                         return true;
                     }
                 });
+
+         users= new ArrayList<>();
+        final DatabaseReference databaseUsers;
+        databaseUsers = FirebaseDatabase.getInstance().getReference("users");
+
+        databaseUsers.addValueEventListener(new ValueEventListener() {
+
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //clearing the previous artist list
+                // if(users != null)
+                users.clear();
+
+                //iterating through all the nodes
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting artist
+                    User user = postSnapshot.getValue(User.class);
+                    //adding artist to the list
+                    users.add(user);
+                }
+                // int count =0;
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +53,14 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements android.widget.AdapterView.OnItemSelectedListener{
 
+    Spinner spinner2;
+    List<Property> zones2;
+    String day2;
+    List<historyInfoPerDay> info2 ;
+
+    BarChart chart;
+    String selectedItem;
+
     ArrayList<Statistics> history;
     ArrayList<historyInfoPerDay> info;
     int ID;
@@ -59,11 +74,11 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
     String email, plateNo;
     TextView text;
-    Button button0, button1, button2, button3, button4, button5 , button6, button7, button8 , button9, button10, button11 , button12, button13, button14 , button15;
+    Button button0, button1, button2, button3, button4, button5 , button6, button7, button8 , button9, button10, button11 , button12, button13, button14 , button15, button29;
     User user;
     Random r;
     String selectedDate = " ";
-   final int [] fixedTime =  {7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
+   final int [] fixedTime =  {6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
     final int [] fixedTimeCounter =new int[fixedTime.length];
     Reservation reservation;
     int day;
@@ -134,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         button12 =(Button) findViewById(R.id.button12);
         button13 =(Button) findViewById(R.id.button13);
         button14 =(Button) findViewById(R.id.button14);
+        button29 =(Button) findViewById(R.id.button29);
+
+
 
         databaseUsers = FirebaseDatabase.getInstance().getReference("users");
         databaseReservations = FirebaseDatabase.getInstance().getReference("reservations");
@@ -143,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         Intent intent = getIntent();
         //text = (TextView) findViewById(R.id.t-1);
         zoneName = intent.getStringExtra("zoneName");
+
+
 
         databaseReservations.addValueEventListener(new ValueEventListener() {
             @Override
@@ -166,106 +186,267 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                     for (int k=0; k< fixedTime.length;  k++){
                         for(int i=0;  i< reservations.size(); i++)
                         {
-                            if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus())){
+                            if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"cancelled".equals(reservations.get(i).getStatus()) && !"subcancelled".equals(reservations.get(i).getStatus())){
                                 for (int j=0; j< reservations.get(i).getTime().size() ;j++){
                                     if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
                                         fixedTimeCounter[k]= fixedTimeCounter[k]+1;
                                     }
                                 }
                             }
+
+                            if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName)  && "subcancelled".equals(reservations.get(i).getStatus())){
+                                for (int j=0; j< reservations.get(i).getTime().size()-reservations.get(i).cancelledHours ;j++){
+                                    if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
+                                        fixedTimeCounter[k]= fixedTimeCounter[k]+1;
+                                    }
+                                }
+                            }
+
+
+                            }
+
+
+
+                        if ((4 - fixedTimeCounter[0]) == 0) {
+                            button29.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[0]) == 1) {
+                            button29.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[0]) == 2){
+                            button29.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button29.setBackgroundColor(0xFF00AA4A);// green
                         }
 
-                    if ((4 - fixedTimeCounter[0]) <= 0) {
-                        button0.setBackgroundColor(Color.RED);
-                    }
-                    else
-                    {
-                        button0.setBackgroundColor(0xFF4383CC);
-                    }
-                    if ((4 - fixedTimeCounter[1]) <= 0) {
-                        button1.setBackgroundColor(Color.RED);
-                    }
-                    else {
-                        button1.setBackgroundColor(0xFF4383CC);
-                    }
-                    if ((4 - fixedTimeCounter[2]) <= 0) {
-                        button2.setBackgroundColor(Color.RED);
-                    }
-                    else {
-                        button2.setBackgroundColor(0xFF4383CC);
-                    }
-                        if ((4 - fixedTimeCounter[3]) <= 0) {
-                            button3.setBackgroundColor(Color.RED);
+
+
+                        if ((4 - fixedTimeCounter[1]) == 0) {
+                            button0.setBackgroundColor(0xffd6d7d7);//gray
                         }
-                        else {
-                            button3.setBackgroundColor(0xFF4383CC);
+                        else if ((4 - fixedTimeCounter[1]) == 1) {
+                            button0.setBackgroundColor(0xFFDB0101);//red
                         }
-                        if ((4 - fixedTimeCounter[4]) <= 0) {
-                            button4.setBackgroundColor(Color.RED);
+                        else if ((4 - fixedTimeCounter[1]) == 2){
+                            button0.setBackgroundColor(0xFFF77824);//orang
                         }
-                        else {
-                            button4.setBackgroundColor(0xFF4383CC);
-                        }
-                        if ((4 - fixedTimeCounter[5]) <= 0) {
-                            button5.setBackgroundColor(Color.RED);
-                        }
-                        else {
-                            button5.setBackgroundColor(0xFF4383CC);
-                        }
-                        if ((4 - fixedTimeCounter[6]) <= 0) {
-                            button6.setBackgroundColor(Color.RED);
-                        }
-                        else {
-                            button6.setBackgroundColor(0xFF4383CC);
-                        }
-                        if ((4 - fixedTimeCounter[7]) <= 0) {
-                            button7.setBackgroundColor(Color.RED);
-                        }
-                        else {
-                            button7.setBackgroundColor(0xFF4383CC);
+                        else
+                        {
+                            button0.setBackgroundColor(0xFF00AA4A);// green
                         }
 
-                        if ((4 - fixedTimeCounter[8]) <= 0) {
-                            button8.setBackgroundColor(Color.RED);
+
+                        if ((4 - fixedTimeCounter[2]) == 0) {
+                            button1.setBackgroundColor(0xffd6d7d7);//gray
                         }
-                        else {
-                            button8.setBackgroundColor(0xFF4383CC);
+                        else if ((4 - fixedTimeCounter[2]) == 1) {
+                            button1.setBackgroundColor(0xFFDB0101);//red
                         }
-                        if ((4 - fixedTimeCounter[9]) <= 0) {
-                            button9.setBackgroundColor(Color.RED);
+                        else if ((4 - fixedTimeCounter[2]) == 2){
+                            button1.setBackgroundColor(0xFFF77824);//orang
                         }
-                        else {
-                            button9.setBackgroundColor(0xFF4383CC);
+                        else
+                        {
+                            button1.setBackgroundColor(0xFF00AA4A);// green
                         }
-                        if ((4 - fixedTimeCounter[10]) <= 0) {
-                            button10.setBackgroundColor(Color.RED);
+
+
+
+                        if ((4 - fixedTimeCounter[3]) == 0) {
+                            button2.setBackgroundColor(0xffd6d7d7);//gray
                         }
-                        else {
-                            button10.setBackgroundColor(0xFF4383CC);
+                        else if ((4 - fixedTimeCounter[3]) == 1) {
+                            button2.setBackgroundColor(0xFFDB0101);//red
                         }
-                        if ((4 - fixedTimeCounter[11]) <= 0) {
-                            button11.setBackgroundColor(Color.RED);
+                        else if ((4 - fixedTimeCounter[3]) == 2){
+                            button2.setBackgroundColor(0xFFF77824);//orang
                         }
-                        else {
-                            button11.setBackgroundColor(0xFF4383CC);
+                        else
+                        {
+                            button2.setBackgroundColor(0xFF00AA4A);// green
                         }
-                        if ((4 - fixedTimeCounter[12]) <= 0) {
-                            button12.setBackgroundColor(Color.RED);
+
+
+
+                        if ((4 - fixedTimeCounter[4]) == 0) {
+                            button3.setBackgroundColor(0xffd6d7d7);//gray
                         }
-                        else {
-                            button12.setBackgroundColor(0xFF4383CC);
+                        else if ((4 - fixedTimeCounter[4]) == 1) {
+                            button3.setBackgroundColor(0xFFDB0101);//red
                         }
-                        if ((4 - fixedTimeCounter[13]) <= 0) {
-                            button13.setBackgroundColor(Color.RED);
+                        else if ((4 - fixedTimeCounter[4]) == 2){
+                            button3.setBackgroundColor(0xFFF77824);//orang
                         }
-                        else {
-                            button13.setBackgroundColor(0xFF4383CC);
+                        else
+                        {
+                            button3.setBackgroundColor(0xFF00AA4A);// green
                         }
-                        if ((4 - fixedTimeCounter[14]) <= 0) {
-                            button14.setBackgroundColor(Color.RED);
+
+
+                        if ((4 - fixedTimeCounter[5]) == 0) {
+                            button4.setBackgroundColor(0xffd6d7d7);//gray
                         }
-                        else {
-                            button14.setBackgroundColor(0xFF4383CC);
+                        else if ((4 - fixedTimeCounter[5]) == 1) {
+                            button4.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[5]) == 2){
+                            button4.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button4.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[6]) == 0) {
+                            button5.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[6]) == 1) {
+                            button5.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[6]) == 2){
+                            button5.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button5.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[7]) == 0) {
+                            button6.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[7]) == 1) {
+                            button6.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[7]) == 2){
+                            button6.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button6.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[8]) == 0) {
+                            button7.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[8]) == 1) {
+                            button7.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[8]) == 2){
+                            button7.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button7.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[9]) == 0) {
+                            button8.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[9]) == 1) {
+                            button8.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[9]) == 2){
+                            button8.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button8.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[10]) == 0) {
+                            button9.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[10]) == 1) {
+                            button9.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[10]) == 2){
+                            button9.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button9.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+
+                        if ((4 - fixedTimeCounter[11]) == 0) {
+                            button10.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[11]) == 1) {
+                            button10.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[11]) == 2){
+                            button10.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button10.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[12]) == 0) {
+                            button11.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[12]) == 1) {
+                            button11.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[12]) == 2){
+                            button11.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button11.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[13]) == 0) {
+                            button12.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[13]) == 1) {
+                            button12.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[13]) == 2){
+                            button12.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button12.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+
+                        if ((4 - fixedTimeCounter[14]) == 0) {
+                            button13.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[14]) == 1) {
+                            button13.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[14]) == 2){
+                            button13.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button13.setBackgroundColor(0xFF00AA4A);// green
+                        }
+
+                        if ((4 - fixedTimeCounter[15]) == 0) {
+                            button14.setBackgroundColor(0xffd6d7d7);//gray
+                        }
+                        else if ((4 - fixedTimeCounter[15]) == 1) {
+                            button14.setBackgroundColor(0xFFDB0101);//red
+                        }
+                        else if ((4 - fixedTimeCounter[15]) == 2){
+                            button14.setBackgroundColor(0xFFF77824);//orang
+                        }
+                        else
+                        {
+                            button14.setBackgroundColor(0xFF00AA4A);// green
                         }
 
                 }
@@ -361,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                       adapter2 = ArrayAdapter.createFromResource(MainActivity.this,R.array.ending_time21,android.R.layout.simple_spinner_item);
 
                   }
-                  else if (startTime.equals("22")){
+                  else if (startTime.equals("17")){
                       adapter2 = ArrayAdapter.createFromResource(MainActivity.this,R.array.ending_time22,android.R.layout.simple_spinner_item);
 
                   }
@@ -659,107 +840,273 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
                 for (int k = 0; k < fixedTime.length; k++) {
                     for (int i = 0; i < reservations.size(); i++) {
-                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus())) {
-                            for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
-                                if (reservations.get(i).getTime().get(j).equals(fixedTime[k])) {
-                                    fixedTimeCounter[k] = fixedTimeCounter[k] + 1;
+
+//                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus())) {
+//                            for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
+//                                if (reservations.get(i).getTime().get(j).equals(fixedTime[k])) {
+//                                    fixedTimeCounter[k] = fixedTimeCounter[k] + 1;
+//                                }
+//                            }
+//                        }
+
+                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"cancelled".equals(reservations.get(i).getStatus()) && !"subcancelled".equals(reservations.get(i).getStatus())){
+                            for (int j=0; j< reservations.get(i).getTime().size() ;j++){
+                                if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
+                                    fixedTimeCounter[k]= fixedTimeCounter[k]+1;
+                                }
+                            }
+                        }
+
+                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName)  && "subcancelled".equals(reservations.get(i).getStatus())){
+                            for (int j=0; j< reservations.get(i).getTime().size()-reservations.get(i).cancelledHours ;j++){
+                                if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
+                                    fixedTimeCounter[k]= fixedTimeCounter[k]+1;
                                 }
                             }
                         }
                     }
                 }
 
-                if ((4 - fixedTimeCounter[0]) <= 0) {
-                    button0.setBackgroundColor(Color.RED);
+                if ((4 - fixedTimeCounter[0]) == 0) {
+                    button29.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[0]) == 1) {
+                    button29.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[0]) == 2){
+                    button29.setBackgroundColor(0xFFF77824);//orang
                 }
                 else
                 {
-                    button0.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[1]) <= 0) {
-                    button1.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button1.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[2]) <= 0) {
-                    button2.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button2.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[3]) <= 0) {
-                    button3.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button3.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[4]) <= 0) {
-                    button4.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button4.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[5]) <= 0) {
-                    button5.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button5.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[6]) <= 0) {
-                    button6.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button6.setBackgroundColor(0xFF4383CC);
-                }
-                if ((4 - fixedTimeCounter[7]) <= 0) {
-                    button7.setBackgroundColor(Color.RED);
-                }
-                else {
-                    button7.setBackgroundColor(0xFF4383CC);
+                    button29.setBackgroundColor(0xFF00AA4A);// green
                 }
 
-                if ((4 - fixedTimeCounter[8]) <= 0) {
-                    button8.setBackgroundColor(Color.RED);
+
+
+                if ((4 - fixedTimeCounter[1]) == 0) {
+                    button0.setBackgroundColor(0xffd6d7d7);//gray
                 }
-                else {
-                    button8.setBackgroundColor(0xFF4383CC);
+                else if ((4 - fixedTimeCounter[1]) == 1) {
+                    button0.setBackgroundColor(0xFFDB0101);//red
                 }
-                if ((4 - fixedTimeCounter[9]) <= 0) {
-                    button9.setBackgroundColor(Color.RED);
+                else if ((4 - fixedTimeCounter[1]) == 2){
+                    button0.setBackgroundColor(0xFFF77824);//orang
                 }
-                else {
-                    button9.setBackgroundColor(0xFF4383CC);
+                else
+                {
+                    button0.setBackgroundColor(0xFF00AA4A);// green
                 }
-                if ((4 - fixedTimeCounter[10]) <= 0) {
-                    button10.setBackgroundColor(Color.RED);
+
+
+                if ((4 - fixedTimeCounter[2]) == 0) {
+                    button1.setBackgroundColor(0xffd6d7d7);//gray
                 }
-                else {
-                    button10.setBackgroundColor(0xFF4383CC);
+                else if ((4 - fixedTimeCounter[2]) == 1) {
+                    button1.setBackgroundColor(0xFFDB0101);//red
                 }
-                if ((4 - fixedTimeCounter[11]) <= 0) {
-                    button11.setBackgroundColor(Color.RED);
+                else if ((4 - fixedTimeCounter[2]) == 2){
+                    button1.setBackgroundColor(0xFFF77824);//orang
                 }
-                else {
-                    button11.setBackgroundColor(0xFF4383CC);
+                else
+                {
+                    button1.setBackgroundColor(0xFF00AA4A);// green
                 }
-                if ((4 - fixedTimeCounter[12]) <= 0) {
-                    button12.setBackgroundColor(Color.RED);
+
+
+
+                if ((4 - fixedTimeCounter[3]) == 0) {
+                    button2.setBackgroundColor(0xffd6d7d7);//gray
                 }
-                else {
-                    button12.setBackgroundColor(0xFF4383CC);
+                else if ((4 - fixedTimeCounter[3]) == 1) {
+                    button2.setBackgroundColor(0xFFDB0101);//red
                 }
-                if ((4 - fixedTimeCounter[13]) <= 0) {
-                    button13.setBackgroundColor(Color.RED);
+                else if ((4 - fixedTimeCounter[3]) == 2){
+                    button2.setBackgroundColor(0xFFF77824);//orang
                 }
-                else {
-                    button13.setBackgroundColor(0xFF4383CC);
+                else
+                {
+                    button2.setBackgroundColor(0xFF00AA4A);// green
                 }
-                if ((4 - fixedTimeCounter[14]) <= 0) {
-                    button14.setBackgroundColor(Color.RED);
+
+
+
+                if ((4 - fixedTimeCounter[4]) == 0) {
+                    button3.setBackgroundColor(0xffd6d7d7);//gray
                 }
-                else {
-                    button14.setBackgroundColor(0xFF4383CC);
+                else if ((4 - fixedTimeCounter[4]) == 1) {
+                    button3.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[4]) == 2){
+                    button3.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button3.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[5]) == 0) {
+                    button4.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[5]) == 1) {
+                    button4.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[5]) == 2){
+                    button4.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button4.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[6]) == 0) {
+                    button5.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[6]) == 1) {
+                    button5.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[6]) == 2){
+                    button5.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button5.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[7]) == 0) {
+                    button6.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[7]) == 1) {
+                    button6.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[7]) == 2){
+                    button6.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button6.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[8]) == 0) {
+                    button7.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[8]) == 1) {
+                    button7.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[8]) == 2){
+                    button7.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button7.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[9]) == 0) {
+                    button8.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[9]) == 1) {
+                    button8.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[9]) == 2){
+                    button8.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button8.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[10]) == 0) {
+                    button9.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[10]) == 1) {
+                    button9.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[10]) == 2){
+                    button9.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button9.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+
+                if ((4 - fixedTimeCounter[11]) == 0) {
+                    button10.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[11]) == 1) {
+                    button10.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[11]) == 2){
+                    button10.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button10.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[12]) == 0) {
+                    button11.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[12]) == 1) {
+                    button11.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[12]) == 2){
+                    button11.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button11.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[13]) == 0) {
+                    button12.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[13]) == 1) {
+                    button12.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[13]) == 2){
+                    button12.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button12.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+
+                if ((4 - fixedTimeCounter[14]) == 0) {
+                    button13.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[14]) == 1) {
+                    button13.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[14]) == 2){
+                    button13.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button13.setBackgroundColor(0xFF00AA4A);// green
+                }
+
+                if ((4 - fixedTimeCounter[15]) == 0) {
+                    button14.setBackgroundColor(0xffd6d7d7);//gray
+                }
+                else if ((4 - fixedTimeCounter[15]) == 1) {
+                    button14.setBackgroundColor(0xFFDB0101);//red
+                }
+                else if ((4 - fixedTimeCounter[15]) == 2){
+                    button14.setBackgroundColor(0xFFF77824);//orang
+                }
+                else
+                {
+                    button14.setBackgroundColor(0xFF00AA4A);// green
                 }
             }
 
@@ -778,128 +1125,252 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
 
+
+
+        zones2 = new ArrayList<>();
+        info2 = new ArrayList<>();
+        databaseZones = FirebaseDatabase.getInstance().getReference("zones");
+
+        spinner2 = findViewById(R.id.SpotSpinner);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(MainActivity.this,R.array.days,android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+        day2 = spinner2.getSelectedItem().toString();
+
+
+
+
+        zones2= ZonesList.zones;
+        if (zones2 == null){
+          //  zones2= zoneForHistogram2.zones;
+        }
+
+        chart =(BarChart) findViewById(R.id.bargraph);
+        // chart.setNoDataText("Click to View");
+
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedItem = parentView.getItemAtPosition(position).toString();
+
+                List<BarEntry> percentage = new ArrayList<>();
+                for (int i =0; i< zones2.size(); i++){
+                    //  percentage.clear();
+                    if (zones2.get(i).getZoneName().equals(zoneName)){
+                        for(int j=0; j< zones2.get(i).getStatistics().size(); j++){
+                            if (zones2.get(i).getStatistics().get(j).getDay().equals(selectedItem)){
+
+                                // int size = zones.get(i).getHistory().get(j).getInfo().size();
+
+
+                                for (int h=0; h< zones2.get(i).getStatistics().get(j).getHoursInfo().size(); h++ ){
+
+                                    int count =0 ;
+                                    for (int k=0; k< zones2.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().size(); k++ ){
+                                        count = count + zones2.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().get(k);
+                                    }
+                                    float percent = (float)count/16;
+                                    int result = (int) (percent*100);
+                                    percentage.add(new BarEntry(result, h));
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                //   BarDataSet set = new BarDataSet(percentage, "BarDataSet");
+
+                ArrayList<String> hours = new ArrayList<>();
+                hours.add("6 AM");
+                hours.add("7 AM");
+                hours.add("8 AM");
+                hours.add("9 AM");
+                hours.add("10 AM");
+                hours.add("11 AM");
+                hours.add("12 PM");
+                hours.add("13 PM");
+                hours.add("14 PM");
+                hours.add("15 PM");
+                hours.add("16 PM");
+                hours.add("17 PM");
+                hours.add("18 PM");
+                hours.add("19 PM");
+                hours.add("20 PM");
+                hours.add("21 PM");
+                hours.add("22 PM");
+
+
+
+
+
+                BarDataSet bardataset = new BarDataSet(percentage, "Occupied Percentage");
+                int color = ContextCompat.getColor(MainActivity.this, R.color.chart);
+                bardataset.setColor(color);
+
+                //  BarChart chart2 = new BarChart(this);
+                //  setContentView(chart2);
+                BarData data = new BarData(hours, bardataset);
+
+                chart.setDescription("");
+                chart.getAxisRight().setDrawGridLines(false);
+                chart.getAxisLeft().setDrawGridLines(false);
+                chart.getXAxis().setDrawGridLines(false);
+                YAxis rightYAxis = chart.getAxisRight();
+                rightYAxis.setEnabled(false);
+                YAxis leftYAxis = chart.getAxisLeft();
+                leftYAxis.setEnabled(false);
+
+                XAxis topXAxis = chart.getXAxis();
+               // topXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                chart.setData(data); // set the data and list of lables into chart
+                chart.invalidate();
+//                        chart.setScaleEnabled(true);
+//                        chart.setDragEnabled(true);
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+
+
+
+
+
     }
+
+
+
+
 
 
 
     public void createReservation(View v ){
 
-         resNo =  r.nextInt(1000);
+        if (!selectedDate.equals("") && !startTime.equals("-- Select --")  && !hours.equals("-- Select --")) {
 
-          reservation = new Reservation( resNo,  userLogged.getPlateNo(), zoneName, selectedDate,arrayOfTime(startTime,hours)  , "created",  arrayOfTime(startTime,hours).size()*5, 0, 0, userLogged.getUid());
+            resNo = r.nextInt(1000);
 
-        List<Integer> count = new ArrayList<>();
+            reservation = new Reservation(resNo, userLogged.getPlateNo(), zoneName, selectedDate, arrayOfTime(startTime, hours), "created", arrayOfTime(startTime, hours).size() * 5, 0, 0, userLogged.getUid());
 
-        int [] counters = new int[ time.size()] ;
-        for (int i=0; i< counters.length ;i++){
-            counters[i]=0;
-        }
+            List<Integer> count = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date strDate = null;
-        try {
-            strDate = sdf.parse(selectedDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            int[] counters = new int[time.size()];
+            for (int i = 0; i < counters.length; i++) {
+                counters[i] = 0;
+            }
 
-        Date currentDate = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
-        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date strDate = null;
+            try {
+                strDate = sdf.parse(selectedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        if (strDate.getDay() - currentDate.getDay() == 1 ){
+            Date currentDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
+            int currentHour = cal.get(Calendar.HOUR_OF_DAY);
 
-            for (int k=0; k< time.size(); k++){
-                for(int i=0;  i< reservations.size(); i++)
-                {
-                    if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus()) ){
-                        for (int j=0; j< reservations.get(i).getTime().size() ;j++){
-                            if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
-                                counters[k]= counters[k]+1;
+            if (strDate.getDay() - currentDate.getDay() == 1) {
+
+                for (int k = 0; k < time.size(); k++) {
+                    for (int i = 0; i < reservations.size(); i++) {
+                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus())) {
+                            for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
+                                if (reservations.get(i).getTime().get(j).equals(time.get(k))) {
+                                    counters[k] = counters[k] + 1;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            String alertMessage = "No available parking at \n" ;
-            boolean exist = true;
+                String alertMessage = "No available parking at \n";
+                boolean exist = true;
 
-            for(int i=0; i<counters.length ; i++){
+                for (int i = 0; i < counters.length; i++) {
 
-                if ((4-counters[i]) <= 0){
-                    exist = false;
-                    //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
-                    //   Toast.LENGTH_LONG).show();
-                    alertMessage =  alertMessage + time.get(i)+":00 \n";
+                    if ((4 - counters[i]) <= 0) {
+                        exist = false;
+                        //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
+                        //   Toast.LENGTH_LONG).show();
+                        alertMessage = alertMessage + time.get(i) + ":00 \n";
+
+                    }
+                    if (i == counters.length - 1 && exist == false) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage(alertMessage + "");
+                        builder.setTitle("Error");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog a = builder.create();
+                        a.show();
+
+                        return;
+
+                    }
 
                 }
-                if (i == counters.length-1 && exist == false){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this );
-                    builder.setMessage(alertMessage+"");
-                    builder.setTitle("Error");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog a = builder.create();
-                    a.show();
+            } else if (strDate.getDay() - currentDate.getDay() == 0 && Integer.parseInt(startTime) - currentHour >= 1) {
 
-                    return;
-
-                }
-
-            }
-        }
-        else if (strDate.getDay() - currentDate.getDay() == 0 && Integer.parseInt(startTime) - currentHour >=1){
-
-            for (int k=0; k< time.size(); k++){
-                for(int i=0;  i< reservations.size(); i++)
-                {
-                    if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus()) ){
-                        for (int j=0; j< reservations.get(i).getTime().size() ;j++){
-                            if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
-                                counters[k]= counters[k]+1;
+                for (int k = 0; k < time.size(); k++) {
+                    for (int i = 0; i < reservations.size(); i++) {
+                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName) && !"canceled".equals(reservations.get(i).getStatus())) {
+                            for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
+                                if (reservations.get(i).getTime().get(j).equals(time.get(k))) {
+                                    counters[k] = counters[k] + 1;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            String alertMessage = "No available parking at \n" ;
-            boolean exist = true;
+                String alertMessage = "No available parking at \n";
+                boolean exist = true;
 
-            for(int i=0; i<counters.length ; i++){
+                for (int i = 0; i < counters.length; i++) {
 
-                if ((4-counters[i]) <= 0){
-                    exist = false;
-                    //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
-                    //   Toast.LENGTH_LONG).show();
-                    alertMessage =  alertMessage + time.get(i)+":00 \n";
+                    if ((4 - counters[i]) <= 0) {
+                        exist = false;
+                        //  Toast.makeText(MainActivity.this, " no available parking at" + time.get(i),
+                        //   Toast.LENGTH_LONG).show();
+                        alertMessage = alertMessage + time.get(i) + ":00 \n";
+
+                    }
+                    if (i == counters.length - 1 && exist == false) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setMessage(alertMessage + "");
+                        builder.setTitle("Error");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        AlertDialog a = builder.create();
+                        a.show();
+
+                        return;
+
+                    }
 
                 }
-                if (i == counters.length-1 && exist == false){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this );
-                    builder.setMessage(alertMessage+"");
-                    builder.setTitle("Error");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    AlertDialog a = builder.create();
-                    a.show();
-
-                    return;
-
-                }
-
             }
-        }
   /*      else{
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -951,16 +1422,67 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         }
 */
 
-       int totalReservationHours = 0;
-        for (int i =0; i< reservations.size(); i++) {
-            if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getDate().equals(selectedDate)) {
-                totalReservationHours +=( reservations.get(i).getTime().size() - reservations.get(i).getExtendedHours() - reservations.get(i).getCancelledHours());
+            int totalReservationHours = 0;
+            for (int i = 0; i < reservations.size(); i++) {
+                if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getDate().equals(selectedDate)) {
+                    totalReservationHours += (reservations.get(i).getTime().size() - reservations.get(i).getExtendedHours() - reservations.get(i).getCancelledHours());
+                }
             }
-        }
-        if( (totalReservationHours + Integer.parseInt(hours)) > 6){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            if ((totalReservationHours + Integer.parseInt(hours)) > 6) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setMessage("You exceed the total allowed number of hours which is 6 hours per day.\n" + "Total reservation hours for you are: " + totalReservationHours);
+                builder.setMessage("You exceed the total allowed number of hours which is 6 hours per day.\n" + "Total reservation hours for you are: " + totalReservationHours);
+                builder.setTitle("Error");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog a = builder.create();
+                a.show();
+
+                return;
+
+            }
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to reserve");
+            builder.setTitle("Confirmation Message");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Notification notification = buildNotification(reservation);
+                    scheduleNotification(notification, selectedDate, startTime, hours, reservation);
+
+
+                    statisticUpdate(selectedDate, startTime, hours);
+                    //deleteNotification(reservation);
+
+                    String id = databaseReservations.push().getKey();
+                    databaseReservations.child(id).setValue(reservation);
+                    finish();
+
+                    Intent toChoices = new Intent(MainActivity.this, Choices.class);
+                    //   toLoginIntent.putExtra("plateNo", plateNo);
+                    startActivity(toChoices);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog a = builder.create();
+            a.show();
+
+
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Make sure that all the filed are not empty");
             builder.setTitle("Error");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
@@ -970,45 +1492,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             });
             AlertDialog a = builder.create();
             a.show();
-
-            return;
-
         }
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to reserve");
-        builder.setTitle("Confirmation Message");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Notification notification = buildNotification( reservation);
-                scheduleNotification(notification, selectedDate,startTime,hours,reservation);
-
-
-                statisticUpdate(selectedDate, startTime, hours);
-                //deleteNotification(reservation);
-
-                String id = databaseReservations.push().getKey();
-                databaseReservations.child(id).setValue(reservation);
-                finish();
-
-                Intent toChoices = new Intent(MainActivity.this, Choices.class);
-                //   toLoginIntent.putExtra("plateNo", plateNo);
-                startActivity(toChoices);
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog a = builder.create();
-        a.show();
-
-
-
     }
 
     public List<Integer> arrayOfTime (String startTime , String hours){
@@ -1153,6 +1637,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             }
         }
 
+        long startTime3 = System.nanoTime();
         Property property= new Property(zoneName,4,history);
 
         Query applesQuery = ref.child("zones").orderByChild("zoneName").equalTo(zoneName);
@@ -1169,9 +1654,13 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
+        long endTime3 = System.nanoTime();
+        Log.i("Time", "Delete zone took "+(endTime3 - startTime3) + " ns" );
+        long startTime2 = System.nanoTime();
         String id = databaseZones.push().getKey();
         databaseZones.child(id).setValue(property);
+        long endTime2 = System.nanoTime();
+        Log.i("Time", "Post zone took "+(endTime2 - startTime2) + " ns" );
         finish();
         return;
 
@@ -1303,8 +1792,10 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                .setSmallIcon(R.drawable.ic_notifications) // notification icon
                 .setContentTitle("Warning") // title for notification
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentText("Reservation No "+ reservation.getResNo() + " is due after 30 minutes")// message for notification
+                .setContentText("Your reservation No "+ reservation.getResNo() + " in zone "+ reservation.getZoneName()+ " is due after 30 minutes")// message for notification
                 .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Your reservation No "+ reservation.getResNo() + " in zone "+ reservation.getZoneName()+ " is due after 30 minutes"))
                 .setVibrate(mVibratePattern); // clear notification after click
 
 
@@ -1324,5 +1815,14 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, reservation.getResNo(), intent, 0);
         alarmManager.cancel(pendingIntent);
     }
+
+
+
+
+
+
+
+
+
 
 }

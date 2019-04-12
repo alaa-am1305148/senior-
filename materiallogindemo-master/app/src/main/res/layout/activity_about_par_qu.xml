@@ -13,7 +13,7 @@
         android:id="@+id/btnMap"
         android:layout_width="300dp"
         android:layout_height="370dp"
-
+        android:clickable="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="56dp"
@@ -33,12 +33,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btnMap"
-        android:layout_alignLeft="@+id/btnMap"
         android:layout_alignStart="@+id/btnMap"
-        android:layout_marginBottom="11dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="68dp"
         android:elevation="2dp"
+        android:onClick="instagram"
         app:srcCompat="@drawable/instagram" />
 
     <ImageView
@@ -46,11 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView6"
-        android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/imageView6"
-        android:layout_toRightOf="@+id/imageView6"
         android:elevation="2dp"
+        android:onClick="twitter"
         app:srcCompat="@drawable/twitter" />
 
     <ImageView
@@ -58,23 +56,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView10"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/imageView10"
         android:elevation="2dp"
+        android:onClick="facebook"
         app:srcCompat="@drawable/facebook" />
 
     <ImageView
         android:id="@+id/imageView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView11"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_alignTop="@+id/imageView11"
+        android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/imageView11"
-        android:layout_toRightOf="@+id/imageView11"
         android:elevation="2dp"
         app:srcCompat="@drawable/youtube" />
 
-    <ImageView
+ <!--   <ImageView
         android:id="@+id/imageView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,6 +83,6 @@
         android:layout_toRightOf="@+id/imageView12"
         android:elevation="2dp"
         app:srcCompat="@drawable/linkedin" />
-
+-->
 
 </RelativeLayout>

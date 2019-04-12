@@ -103,10 +103,6 @@ public class Check_availability extends AppCompatActivity {
 
       // ID = getIntent().getIntExtra("ID",0);
 
-        btn1 =(Button) findViewById(R.id.btn1);
-        btn2 =(Button) findViewById(R.id.btn2);
-        btn3 =(Button) findViewById(R.id.btn3);
-        btn4 =(Button) findViewById(R.id.btn4);
 
         img4 =(ImageView) findViewById(R.id.imageView4);
         img5 =(ImageView) findViewById(R.id.imageView5);

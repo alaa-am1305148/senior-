@@ -34,6 +34,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
  ProgressBar progressBar;
  private FirebaseAuth mAuth;
     DatabaseReference databaseUsers;
+    boolean flag = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,12 +72,27 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         final String password = passwordText.getText().toString().trim();
         final String uid = uidText.getText().toString().trim();
 
+        final StringBuilder result = new StringBuilder();
+        for (int i = 0; i < uid.length(); i++) {
+            if (i %2 == 0 && i != 0) {
+                result.append(" ");
+            }
+
+            result.append(uid.charAt(i));
+        }
+
     if (validate()){
 
         progressBar.setVisibility(View.VISIBLE);
         progressBarText.setVisibility(View.VISIBLE);
 
-
+        for(int i =0; i< First.users.size(); i++) {
+            if (First.users.get(i).getPlateNo().equals(plateNo) || First.users.get(i).getUid().equals(result.toString())) {
+                flag = true;
+            }
+        }
+        if (flag == false)
+        {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -85,9 +101,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 progressBar.setVisibility(View.GONE);
                 progressBarText.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
+
                     String id = databaseUsers.push().getKey();
                     String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    User user = new User(name, plateNo , email, mobile , currentuser, uid);
+                    User user = new User(name, plateNo, email, mobile, currentuser, result.toString());
 
                     databaseUsers.child(id).setValue(user);
 
@@ -97,10 +114,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("email", email);
                     startActivity(intent);
-                }else {
+                } else {
 
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                      //  Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_SHORT).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
 
                         builder.setMessage("You are already registered");
@@ -117,9 +134,31 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
-
             }
         });
+    }
+        else {
+
+            progressBar.setVisibility(View.GONE);
+            progressBarText.setVisibility(View.GONE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
+
+            builder.setMessage("You are already registered2");
+            builder.setTitle("Error");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    flag = false;
+                    dialog.cancel();
+                }
+            });
+            AlertDialog a = builder.create();
+            a.show();
+
+            progressBar.setVisibility(View.GONE);
+            progressBarText.setVisibility(View.GONE);
+
+        }
 
     }
 
@@ -129,6 +168,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public boolean validate() {
         boolean valid = true;
 
+        //"^[a-zA-Z0-9]{2}\d[a-zA-Z0-9]{2}\d[a-zA-Z0-9]{2}\d[a-zA-Z0-9]{2}\d+$"
+
+        String uid = uidText.getText().toString().trim();
         String name = nameText.getText().toString().trim();
         String plateNumber = plateText.getText().toString().trim();
         String email = emailText.getText().toString().trim();
@@ -143,7 +185,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             nameText.setError(null);
         }
 
-        if (plateNumber.isEmpty()) {
+        if (plateNumber.isEmpty() || plateNumber.length() < 3 || plateNumber.length() > 6) {
             plateText.setError("Enter Valid Number");
             valid = false;
         } else {
@@ -178,6 +220,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             reEnterPasswordText.setError(null);
         }
+
+        if (uid.isEmpty() || uid.length()!=8) {
+            uidText.setError("Enter Valid Tag");
+            valid = false;
+        } else {
+            mobileText.setError(null);
+        }
+
 
         return valid;
     }

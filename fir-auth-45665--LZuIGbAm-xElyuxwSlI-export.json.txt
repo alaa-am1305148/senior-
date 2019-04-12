@@ -1,0 +1,8 @@
+{
+  "email" : "alaa123@gmail.com",
+  "mobile" : "55233520",
+  "name" : "alaa",
+  "password" : "alaa123",
+  "plateNo" : "123",
+  "uid" : "97 D1 34 83"
+}

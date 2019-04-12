@@ -70,11 +70,11 @@
         <activity
             android:name=".AboutParQU"
             android:label="About ParQu"
-            android:parentActivityName=".First" />
+             />
         <activity
             android:name=".ContactUs"
             android:label="Contact Us"
-            android:parentActivityName=".First" />
+          />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -111,13 +111,6 @@
 
         <receiver android:name=".AlarmNotificationReceiver" />
 
-        <activity
-            android:name=".zoneForHistogram"
-            android:label="Select a Zone"
-            android:parentActivityName=".Choices"></activity>
-        <activity android:name=".zoneForHistogram2"
-            android:label="Select a Zone"
-            android:parentActivityName=".Choices2"></activity>
     </application>
 
 </manifest>
