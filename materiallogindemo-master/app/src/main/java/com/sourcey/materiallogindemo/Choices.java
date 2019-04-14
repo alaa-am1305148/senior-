@@ -71,7 +71,7 @@ public class Choices extends AppCompatActivity {
                                 startActivity(i2);
                                 break;
                             case R.id.nav_moreInfo:
-                                Intent i3 = new Intent(Choices.this, ContactUs.class);
+                                Intent i3 = new Intent(Choices.this, MoreInfoActivity.class);
                                 startActivity(i3);
                                 break;
 

@@ -42,15 +42,7 @@ private ActionBarDrawerToggle mToggle;
 
 
 
-        long startTime = System.nanoTime();
-        DatabaseReference databaseSpot;
-        databaseSpot = FirebaseDatabase.getInstance().getReference("spots");
-        String id = databaseSpot.push().getKey();
-        Spot spot = new Spot ("BNK Male Zone","available",1);
-        databaseSpot.child(id).setValue(spot);
-        long endTime = System.nanoTime();
-        Log.i("Time", "Post spot took "+(endTime - startTime) + " ns" );
-        //////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 //
@@ -168,7 +160,7 @@ private ActionBarDrawerToggle mToggle;
                                 startActivity(i2);
                                 break;
                             case R.id.nav_moreInfo:
-                                Intent i3 = new Intent(First.this, ContactUs.class);
+                                Intent i3 = new Intent(First.this, MoreInfoActivity.class);
                                 startActivity(i3);
                                 break;
                             case R.id.nav_shareThisApp:

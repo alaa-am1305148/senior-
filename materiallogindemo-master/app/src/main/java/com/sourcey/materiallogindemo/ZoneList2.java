@@ -36,7 +36,7 @@ import java.util.TimeZone;
 public class ZoneList2 extends AppCompatActivity {
     private ArrayList<Property> zoneProperties = new ArrayList<>();
 
-
+   static List<Property> zones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +44,7 @@ public class ZoneList2 extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        final List<Property> zones;
+
         zones = new ArrayList<>();
         final List<CurrentlyLooking> currentlyLooking;
         currentlyLooking = new ArrayList<>();

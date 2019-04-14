@@ -100,11 +100,53 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     moveCamera(new LatLng(25.369987, 51.489846), 11, "My Destination" );
                 }
             }
-            else{
-
+            else if (zoneName.equals("CENG Female Zone")){
+                if(spotNum.equals("01")){
+                    moveCamera(new LatLng( 25.374990, 51.488152), 11, "My Destination" );
+                }
+                if(spotNum.equals("02")){
+                    moveCamera(new LatLng(25.375023, 51.488142), 11, "My Destination" );
+                }
+                if(spotNum.equals("03")){
+                    moveCamera(new LatLng( 25.375005, 51.488148), 11, "My Destination" );
+                }
+                if(spotNum.equals("04")){
+                    moveCamera(new LatLng( 25.375057, 51.488127), 11, "My Destination" );
+                }
             }
 
+            else if (zoneName.equals("CENG Male Zone")){
+                if(spotNum.equals("01")){
+                    moveCamera(new LatLng( 25.375327, 51.492001), 11, "My Destination" );
+                }
+                if(spotNum.equals("02")){
+                    moveCamera(new LatLng( 25.375347, 51.492032), 11, "My Destination" );
+                }
+                if(spotNum.equals("03")){
+                    moveCamera(new LatLng(  25.375367, 51.492062), 11, "My Destination" );
+                }
+                if(spotNum.equals("04")){
+                    moveCamera(new LatLng( 25.375388, 51.492108), 11, "My Destination" );
+                }
+            }
+
+            else if (zoneName.equals("BNK Male Zone")){
+                if(spotNum.equals("01")){
+                    moveCamera(new LatLng( 25.377778, 51.490494), 11, "My Destination" );
+                }
+                if(spotNum.equals("02")){
+                    moveCamera(new LatLng(  25.377828, 51.490464), 11, "My Destination" );
+                }
+                if(spotNum.equals("03")){
+                    moveCamera(new LatLng(    25.377792, 51.490477), 11, "My Destination" );
+                }
+                if(spotNum.equals("04")){
+                    moveCamera(new LatLng(   25.377846, 51.490450), 11, "My Destination" );
+                }
+            }
         }
+
+
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");

@@ -3,16 +3,24 @@ package com.sourcey.materiallogindemo;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +45,15 @@ public class Check_availability extends AppCompatActivity {
    ImageView img4, img5, img8, img9, img7;
     String zoneName, spotNum;
     int ID;
-   DatabaseReference  databaseCurrentlyLooking;
+
+    Spinner spinner2;
+    List<Property> zones2;
+    String day2;
+
+    BarChart chart;
+    String selectedItem;
+
+    DatabaseReference  databaseCurrentlyLooking;
 
      List<Property> zones;
     DatabaseReference databaseZones;
@@ -193,6 +209,120 @@ public class Check_availability extends AppCompatActivity {
         if(isServicesOK()){
             init();
         }
+
+
+        spinner2 = findViewById(R.id.SpotSpinner2);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(Check_availability.this,R.array.days,android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
+        day2 = spinner2.getSelectedItem().toString();
+
+
+
+
+        zones2= ZoneList2.zones;
+        if (zones2 == null){
+            //  zones2= zoneForHistogram2.zones;
+        }
+
+        chart =(BarChart) findViewById(R.id.bargraph2);
+        // chart.setNoDataText("Click to View");
+
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                selectedItem = parentView.getItemAtPosition(position).toString();
+
+                List<BarEntry> percentage = new ArrayList<>();
+                for (int i =0; i< zones2.size(); i++){
+                    //  percentage.clear();
+                    if (zones2.get(i).getZoneName().equals(zoneName)){
+                        for(int j=0; j< zones2.get(i).getStatistics().size(); j++){
+                            if (zones2.get(i).getStatistics().get(j).getDay().equals(selectedItem)){
+
+                                // int size = zones.get(i).getHistory().get(j).getInfo().size();
+
+
+                                for (int h=0; h< zones2.get(i).getStatistics().get(j).getHoursInfo().size(); h++ ){
+
+                                    int count =0 ;
+                                    for (int k=0; k< zones2.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().size(); k++ ){
+                                        count = count + zones2.get(i).getStatistics().get(j).getHoursInfo().get(h).getCount().get(k);
+                                    }
+                                    float percent = (float)count/16;
+                                    int result = (int) (percent*100.0);
+                                   // (int) Math.ceil(a / 100.0))
+                                    percentage.add(new BarEntry(result, h));
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                //   BarDataSet set = new BarDataSet(percentage, "BarDataSet");
+
+                ArrayList<String> hours = new ArrayList<>();
+                hours.add("6 AM");
+                hours.add("7 AM");
+                hours.add("8 AM");
+                hours.add("9 AM");
+                hours.add("10 AM");
+                hours.add("11 AM");
+                hours.add("12 PM");
+                hours.add("13 PM");
+                hours.add("14 PM");
+                hours.add("15 PM");
+                hours.add("16 PM");
+                hours.add("17 PM");
+                hours.add("18 PM");
+                hours.add("19 PM");
+                hours.add("20 PM");
+                hours.add("21 PM");
+                hours.add("22 PM");
+
+
+
+
+
+                BarDataSet bardataset = new BarDataSet(percentage, "Occupied Percentage");
+                int color = ContextCompat.getColor(Check_availability.this, R.color.chart);
+                bardataset.setColor(color);
+
+                //  BarChart chart2 = new BarChart(this);
+                //  setContentView(chart2);
+                BarData data = new BarData(hours, bardataset);
+
+                chart.setDescription("");
+                chart.getAxisRight().setDrawGridLines(false);
+                chart.getAxisLeft().setDrawGridLines(false);
+                chart.getXAxis().setDrawGridLines(false);
+                YAxis rightYAxis = chart.getAxisRight();
+                rightYAxis.setEnabled(false);
+                YAxis leftYAxis = chart.getAxisLeft();
+                leftYAxis.setEnabled(false);
+
+                XAxis topXAxis = chart.getXAxis();
+                // topXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                chart.setData(data); // set the data and list of lables into chart
+                chart.invalidate();
+//                        chart.setScaleEnabled(true);
+//                        chart.setDragEnabled(true);
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+
 
     }
 

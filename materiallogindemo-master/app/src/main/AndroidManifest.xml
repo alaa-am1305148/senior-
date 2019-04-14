@@ -69,12 +69,10 @@
             android:parentActivityName=".Choices" />
         <activity
             android:name=".AboutParQU"
-            android:label="About ParQu"
-             />
+            android:label="About ParQu" />
         <activity
             android:name=".ContactUs"
-            android:label="Contact Us"
-          />
+            android:label="Contact Us" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -111,6 +109,10 @@
 
         <receiver android:name=".AlarmNotificationReceiver" />
 
+        <activity android:name=".MoreInfoActivity"
+            android:label="More Details">
+
+        </activity>
     </application>
 
 </manifest>
