@@ -143,7 +143,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             progressBarText.setVisibility(View.GONE);
             AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
 
-            builder.setMessage("You are already registered2");
+            builder.setMessage("You are already registered");
             builder.setTitle("Error");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
@@ -225,7 +225,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             uidText.setError("Enter Valid Tag");
             valid = false;
         } else {
-            mobileText.setError(null);
+            uidText.setError(null);
         }
 
 

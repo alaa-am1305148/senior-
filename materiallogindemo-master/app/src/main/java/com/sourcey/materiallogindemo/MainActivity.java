@@ -57,17 +57,17 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     List<Property> zones2;
     String day2;
     List<historyInfoPerDay> info2 ;
-
+    String error;
     BarChart chart;
     String selectedItem;
 
-    ArrayList<Statistics> history;
-    ArrayList<historyInfoPerDay> info;
+    static ArrayList<Statistics> history;
+    static ArrayList<historyInfoPerDay> info;
     int ID;
     DatabaseReference  databaseCurrentlyLooking;
     int resNo;
-    String startTime ;
-     String hours ;
+   static String startTime ;
+   static   String hours ;
     List<User> users;
     List<Reservation> reservations;
     DatabaseReference databaseUsers, databaseReservations;
@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     Button button0, button1, button2, button3, button4, button5 , button6, button7, button8 , button9, button10, button11 , button12, button13, button14 , button15, button29;
     User user;
     Random r;
-    String selectedDate = " ";
+   static String selectedDate = " ";
    final int [] fixedTime =  {6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
     final int [] fixedTimeCounter =new int[fixedTime.length];
     Reservation reservation;
     int day;
 
-    List<Integer> time = new ArrayList<>() ;
+    static List<Integer> time = new ArrayList<>() ;
 
     private User userLogged = Choices.user;
     Spinner spinner1;
@@ -91,10 +91,11 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListner;
 
-    String zoneName, uid ;
+    static String zoneName;
+    String uid ;
 
-    List<Property> zones;
-    DatabaseReference databaseZones;
+    static List<Property> zones;
+    static DatabaseReference databaseZones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[0]) == 0) {
-                            button29.setBackgroundColor(0xffd6d7d7);//gray
+                            button29.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[0]) == 1) {
                             button29.setBackgroundColor(0xFFDB0101);//red
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[1]) == 0) {
-                            button0.setBackgroundColor(0xffd6d7d7);//gray
+                            button0.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[1]) == 1) {
                             button0.setBackgroundColor(0xFFDB0101);//red
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[2]) == 0) {
-                            button1.setBackgroundColor(0xffd6d7d7);//gray
+                            button1.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[2]) == 1) {
                             button1.setBackgroundColor(0xFFDB0101);//red
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[3]) == 0) {
-                            button2.setBackgroundColor(0xffd6d7d7);//gray
+                            button2.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[3]) == 1) {
                             button2.setBackgroundColor(0xFFDB0101);//red
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[4]) == 0) {
-                            button3.setBackgroundColor(0xffd6d7d7);//gray
+                            button3.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[4]) == 1) {
                             button3.setBackgroundColor(0xFFDB0101);//red
@@ -286,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[5]) == 0) {
-                            button4.setBackgroundColor(0xffd6d7d7);//gray
+                            button4.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[5]) == 1) {
                             button4.setBackgroundColor(0xFFDB0101);//red
@@ -301,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[6]) == 0) {
-                            button5.setBackgroundColor(0xffd6d7d7);//gray
+                            button5.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[6]) == 1) {
                             button5.setBackgroundColor(0xFFDB0101);//red
@@ -316,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[7]) == 0) {
-                            button6.setBackgroundColor(0xffd6d7d7);//gray
+                            button6.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[7]) == 1) {
                             button6.setBackgroundColor(0xFFDB0101);//red
@@ -331,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[8]) == 0) {
-                            button7.setBackgroundColor(0xffd6d7d7);//gray
+                            button7.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[8]) == 1) {
                             button7.setBackgroundColor(0xFFDB0101);//red
@@ -346,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[9]) == 0) {
-                            button8.setBackgroundColor(0xffd6d7d7);//gray
+                            button8.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[9]) == 1) {
                             button8.setBackgroundColor(0xFFDB0101);//red
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[10]) == 0) {
-                            button9.setBackgroundColor(0xffd6d7d7);//gray
+                            button9.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[10]) == 1) {
                             button9.setBackgroundColor(0xFFDB0101);//red
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[11]) == 0) {
-                            button10.setBackgroundColor(0xffd6d7d7);//gray
+                            button10.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[11]) == 1) {
                             button10.setBackgroundColor(0xFFDB0101);//red
@@ -392,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[12]) == 0) {
-                            button11.setBackgroundColor(0xffd6d7d7);//gray
+                            button11.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[12]) == 1) {
                             button11.setBackgroundColor(0xFFDB0101);//red
@@ -407,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[13]) == 0) {
-                            button12.setBackgroundColor(0xffd6d7d7);//gray
+                            button12.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[13]) == 1) {
                             button12.setBackgroundColor(0xFFDB0101);//red
@@ -422,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                         if ((4 - fixedTimeCounter[14]) == 0) {
-                            button13.setBackgroundColor(0xffd6d7d7);//gray
+                            button13.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[14]) == 1) {
                             button13.setBackgroundColor(0xFFDB0101);//red
@@ -436,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                         }
 
                         if ((4 - fixedTimeCounter[15]) == 0) {
-                            button14.setBackgroundColor(0xffd6d7d7);//gray
+                            button14.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                         }
                         else if ((4 - fixedTimeCounter[15]) == 1) {
                             button14.setBackgroundColor(0xFFDB0101);//red
@@ -868,7 +869,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                 }
 
                 if ((4 - fixedTimeCounter[0]) == 0) {
-                    button29.setBackgroundColor(0xffd6d7d7);//gray
+                    button29.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[0]) == 1) {
                     button29.setBackgroundColor(0xFFDB0101);//red
@@ -884,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[1]) == 0) {
-                    button0.setBackgroundColor(0xffd6d7d7);//gray
+                    button0.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[1]) == 1) {
                     button0.setBackgroundColor(0xFFDB0101);//red
@@ -899,7 +900,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[2]) == 0) {
-                    button1.setBackgroundColor(0xffd6d7d7);//gray
+                    button1.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[2]) == 1) {
                     button1.setBackgroundColor(0xFFDB0101);//red
@@ -915,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[3]) == 0) {
-                    button2.setBackgroundColor(0xffd6d7d7);//gray
+                    button2.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[3]) == 1) {
                     button2.setBackgroundColor(0xFFDB0101);//red
@@ -931,7 +932,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[4]) == 0) {
-                    button3.setBackgroundColor(0xffd6d7d7);//gray
+                    button3.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[4]) == 1) {
                     button3.setBackgroundColor(0xFFDB0101);//red
@@ -946,7 +947,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[5]) == 0) {
-                    button4.setBackgroundColor(0xffd6d7d7);//gray
+                    button4.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[5]) == 1) {
                     button4.setBackgroundColor(0xFFDB0101);//red
@@ -961,7 +962,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[6]) == 0) {
-                    button5.setBackgroundColor(0xffd6d7d7);//gray
+                    button5.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[6]) == 1) {
                     button5.setBackgroundColor(0xFFDB0101);//red
@@ -976,7 +977,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[7]) == 0) {
-                    button6.setBackgroundColor(0xffd6d7d7);//gray
+                    button6.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[7]) == 1) {
                     button6.setBackgroundColor(0xFFDB0101);//red
@@ -991,7 +992,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[8]) == 0) {
-                    button7.setBackgroundColor(0xffd6d7d7);//gray
+                    button7.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[8]) == 1) {
                     button7.setBackgroundColor(0xFFDB0101);//red
@@ -1006,7 +1007,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[9]) == 0) {
-                    button8.setBackgroundColor(0xffd6d7d7);//gray
+                    button8.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[9]) == 1) {
                     button8.setBackgroundColor(0xFFDB0101);//red
@@ -1021,7 +1022,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[10]) == 0) {
-                    button9.setBackgroundColor(0xffd6d7d7);//gray
+                    button9.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[10]) == 1) {
                     button9.setBackgroundColor(0xFFDB0101);//red
@@ -1037,7 +1038,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[11]) == 0) {
-                    button10.setBackgroundColor(0xffd6d7d7);//gray
+                    button10.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[11]) == 1) {
                     button10.setBackgroundColor(0xFFDB0101);//red
@@ -1052,7 +1053,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[12]) == 0) {
-                    button11.setBackgroundColor(0xffd6d7d7);//gray
+                    button11.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[12]) == 1) {
                     button11.setBackgroundColor(0xFFDB0101);//red
@@ -1067,7 +1068,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[13]) == 0) {
-                    button12.setBackgroundColor(0xffd6d7d7);//gray
+                    button12.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[13]) == 1) {
                     button12.setBackgroundColor(0xFFDB0101);//red
@@ -1082,7 +1083,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
                 if ((4 - fixedTimeCounter[14]) == 0) {
-                    button13.setBackgroundColor(0xffd6d7d7);//gray
+                    button13.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[14]) == 1) {
                     button13.setBackgroundColor(0xFFDB0101);//red
@@ -1096,7 +1097,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                 }
 
                 if ((4 - fixedTimeCounter[15]) == 0) {
-                    button14.setBackgroundColor(0xffd6d7d7);//gray
+                    button14.setBackgroundColor(getResources().getColor(R.color.b1));//gray
                 }
                 else if ((4 - fixedTimeCounter[15]) == 1) {
                     button14.setBackgroundColor(0xFFDB0101);//red
@@ -1279,10 +1280,49 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
             Date currentDate = new Date();
             Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
             cal.setTimeZone(TimeZone.getTimeZone("Asia/Qatar"));
             int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+            int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+            cal2.setTime(strDate);
+            int x=  cal2.get(Calendar.DAY_OF_MONTH);
+           // int y =  currentDate.getDay();
+             int z = x-currentDay;
 
-            if (strDate.getDay() - currentDate.getDay() == 1) {
+
+            boolean registeredBefore = false;
+            String alertMessage2 = "You already has a reservation at \n" ;
+            for (int i =0; i< reservations.size(); i++){
+                if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getDate().equals(selectedDate) && !reservations.get(i).getStatus().equals("cancelled")){
+                    for (int j=0; j< reservations.get(i).getTime().size() ;j++){
+                        for (int k=0; k< time.size(); k++){
+                            if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
+                                registeredBefore = true;
+                                alertMessage2 =  alertMessage2 + time.get(k)+":00 \n";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (registeredBefore == true){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(alertMessage2+"");
+                builder.setTitle("Error");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog a = builder.create();
+                a.show();
+
+                return;
+            }
+
+
+            if (x - currentDay == 1) {
 
                 for (int k = 0; k < time.size(); k++) {
                     for (int i = 0; i < reservations.size(); i++) {
@@ -1326,7 +1366,44 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                     }
 
                 }
-            } else if (strDate.getDay() - currentDate.getDay() == 0 && Integer.parseInt(startTime) - currentHour >= 1) {
+            } else if( x - currentDay > 1){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setMessage("You can only reserve at the same day or one day before the reservation date");
+                builder.setTitle("Error");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog a = builder.create();
+                a.show();
+
+                return;
+            }
+
+            else if(x - currentDay == 0 && Integer.parseInt(startTime) - currentHour < 1){
+                // error = "The selected start time has elapsed";
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setMessage("The selected start time has elapsed");
+                builder.setTitle("Error");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog a = builder.create();
+                a.show();
+
+                return;
+            }
+
+
+            else if (x - currentDay == 0 && Integer.parseInt(startTime) - currentHour >= 1) {
 
                 for (int k = 0; k < time.size(); k++) {
                     for (int i = 0; i < reservations.size(); i++) {
@@ -1334,6 +1411,13 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
                             for (int j = 0; j < reservations.get(i).getTime().size(); j++) {
                                 if (reservations.get(i).getTime().get(j).equals(time.get(k))) {
                                     counters[k] = counters[k] + 1;
+                                }
+                            }
+                        }
+                        if (reservations.get(i).getDate().equals(selectedDate) && reservations.get(i).getZoneName().equals(zoneName)  && "subcancelled".equals(reservations.get(i).getStatus())){
+                            for (int j=0; j< reservations.get(i).getTime().size()-reservations.get(i).cancelledHours ;j++){
+                                if (reservations.get(i).getTime().get(j).equals(fixedTime[k]) ){
+                                    fixedTimeCounter[k]= fixedTimeCounter[k]+1;
                                 }
                             }
                         }
@@ -1371,56 +1455,8 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
                 }
             }
-  /*      else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            builder.setMessage("You can not register at this time");
-            builder.setTitle("Error");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog a = builder.create();
-            a.show();
-
-            return;
-        }*/
 
 
-
-   /*   boolean registeredBefore = false;
-        String alertMessage2 = "You already has a reservation  at \n" ;
-        for (int i =0; i< reservations.size(); i++){
-            if (reservations.get(i).getCarPlateNo().equals(userLogged.getPlateNo()) && reservations.get(i).getData().equals(selectedDate)){
-                for (int j=0; j< reservations.get(i).getTime().size() ;j++){
-                    for (int k=0; k< time.size(); k++){
-                        if (reservations.get(i).getTime().get(j).equals(time.get(k)) ){
-                            registeredBefore = true;
-                            alertMessage2 =  alertMessage2 + time.get(k)+":00 \n";
-                        }
-                    }
-                }
-            }
-        }
-
-        if (registeredBefore == true){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(alertMessage2+"");
-            builder.setTitle("Error");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog a = builder.create();
-            a.show();
-
-            return;
-        }
-*/
 
             int totalReservationHours = 0;
             for (int i = 0; i < reservations.size(); i++) {
@@ -1453,11 +1489,14 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
+
+                    Thread t1=new Thread(new MyThread());
+                    t1.start();
+
                     Notification notification = buildNotification(reservation);
                     scheduleNotification(notification, selectedDate, startTime, hours, reservation);
 
-
-                    statisticUpdate(selectedDate, startTime, hours);
                     //deleteNotification(reservation);
 
                     String id = databaseReservations.push().getKey();
@@ -1495,7 +1534,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         }
     }
 
-    public List<Integer> arrayOfTime (String startTime , String hours){
+    public static List<Integer> arrayOfTime(String startTime, String hours){
         time.clear();
         int startTime1 = Integer.parseInt(startTime) ;
         int hours1 = Integer.parseInt(hours) ;
@@ -1550,7 +1589,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 //            }
 //        }
 //    }
-    public void statisticUpdate (String selectedDate,String startTime,String hours){
+    static public void  statisticUpdate (String selectedDate,String startTime,String hours){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         history = new ArrayList<>() ;
         info = new ArrayList<>();
@@ -1661,7 +1700,6 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
         databaseZones.child(id).setValue(property);
         long endTime2 = System.nanoTime();
         Log.i("Time", "Post zone took "+(endTime2 - startTime2) + " ns" );
-        finish();
         return;
 
     }
@@ -1742,7 +1780,7 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
 
-    private void scheduleNotification(Notification notification, String date, String startTime, String hours, Reservation reservation) {
+    private  void scheduleNotification(Notification notification, String date, String startTime, String hours, Reservation reservation) {
 
         Intent intent = new Intent(this, AlarmNotificationReceiver.class);
         intent.putExtra(AlarmNotificationReceiver.NOTIF_ID, 1);
@@ -1825,4 +1863,11 @@ public class MainActivity extends AppCompatActivity implements android.widget.Ad
 
 
 
+}
+class MyThread implements Runnable{
+    public void run()
+    {
+        MainActivity.statisticUpdate(MainActivity.selectedDate, MainActivity.startTime, MainActivity.hours);
+
+    }
 }

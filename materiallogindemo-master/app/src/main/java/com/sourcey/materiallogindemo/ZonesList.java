@@ -103,7 +103,6 @@ public class ZonesList extends AppCompatActivity  {
         //create our property elements
         zoneProperties.add(new Property("CBAE Female & Male Zone","College of Business and Economics Building - (H08)","property_image_1", 4));
         zoneProperties.add(new Property("LIB Female & Male Zone"," Library Building - (B13)","property_image_2", 4));
-
         //create our new array adapter
         ArrayAdapter<Property> adapter = new propertyArrayAdapter(this, 0, zoneProperties);
 
@@ -279,7 +278,7 @@ public class ZonesList extends AppCompatActivity  {
                             int currentHour = cal.get(Calendar.HOUR_OF_DAY);
                             int currentMinute = cal.get(Calendar.MINUTE);
 
-                            if(currentHour == currentlyLooking.get(j).getHour() && currentMinute - currentlyLooking.get(j).getMinutes()>=2 ){
+                            if(currentHour == currentlyLooking.get(j).getHour() && currentMinute - currentlyLooking.get(j).getMinutes()>=10 ){
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
                                 Query applesQuery = ref.child("currently looking").orderByChild("id").equalTo(currentlyLooking.get(j).getID());

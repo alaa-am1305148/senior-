@@ -340,7 +340,8 @@ android:fillViewport="true">
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/button23"
                 android:layout_toStartOf="@+id/button12"
-                android:text="0% Left   " />
+                android:text="0% Left   "
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -348,7 +349,8 @@ android:fillViewport="true">
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/button12"
                 android:layout_below="@+id/button24"
-                android:text="25% Left" />
+                android:text="25% Left"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -356,7 +358,8 @@ android:fillViewport="true">
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/button13"
                 android:layout_below="@+id/button25"
-                android:text="50% Left  " />
+                android:text="50% Left  "
+                android:textStyle="bold" />
 
 
             <TextView
@@ -365,7 +368,8 @@ android:fillViewport="true">
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/button14"
                 android:layout_below="@+id/button28"
-                android:text=">75% Left" />
+                android:text=">75% Left"
+                android:textStyle="bold" />
 
                  </RelativeLayout>
 

@@ -55,6 +55,7 @@ public class ShowReservations extends AppCompatActivity {
     int endTime;
     String uDate;
     int flage = 0;
+    boolean flage2 = false;
 
 
     ArrayList<Statistics> history;
@@ -118,7 +119,7 @@ public class ShowReservations extends AppCompatActivity {
 
                 for (int j = 0; j < reservations4.size(); j++) {
                     String resDate = reservations4.get(j).getDate();
-                    String status = reservations4.get(j).getStatus();
+                    String status = reservations4.get(j).getStatus().trim();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     Date strDate = null;
                     Date currentDate = new Date();
@@ -127,12 +128,21 @@ public class ShowReservations extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() > currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("cancel1ed")) && ! (status.equals("subcancel1ed"))) {
+
+                    if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() > currentDate.getDate() && strDate.getMonth() >= currentDate.getMonth() && !status.equals("cancelled") && !status.equals("subcancel1ed")) {
+                        boolean x= !status.equals("cancel1ed");
                         reservations5.add(reservations4.get(j));
                     }
-                   else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1)+1 && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("cancelled")) && ! (status.equals("subcancelled"))) {
+                   else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1) && strDate.getMonth() >= currentDate.getMonth() && !status.equals("cancelled") && !status.equals("subcancelled")) {
                         reservations5.add(reservations4.get(j));
                     }
+
+//
+//                    else if (reservations4.get(j).getCarPlateNo().equals(userLogged.getPlateNo()) && strDate.getDate() == currentDate.getDate()&& currentDate.getHours() <= reservations4.get(j).getTime().get(reservations4.get(j).getTime().size()-1)+1 && strDate.getMonth() >= currentDate.getMonth() && ! (status.equals("cancelled")) && ! (status.equals("subcancelled"))) {
+//                        reservations5.add(reservations4.get(j));
+//                    }
+//
+
                 }
                 list = (ListView) findViewById(R.id.listMenu);
                 list.setAdapter(new ReservationAdapter(getApplicationContext(), reservations5));
@@ -223,7 +233,7 @@ public class ShowReservations extends AppCompatActivity {
                                     }
 
 
-                                if (fixedTimeCounter < 2) {
+                                if (fixedTimeCounter < 4) {
 
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
@@ -419,6 +429,7 @@ public class ShowReservations extends AppCompatActivity {
                     int currentMinute = cal.get(Calendar.MINUTE);
                     int startTime = getItem(p).getTime().get(0);
 
+
                     String uDate = getItem(p).getDate()+"";
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -432,21 +443,20 @@ public class ShowReservations extends AppCompatActivity {
                     // if (  currentHour == endTime-1 && currentMinute >= 30){
                     //     if ( startTime - currentHour == 1 && strDate.getDate() == currentDate.getDate() && strDate.getMonth() == currentDate.getMonth()){
                     int i;
-                    for ( i=0; i< getItem(p).getTime().size(); i++) {
+               //     for ( i=0; i< getItem(p).getTime().size(); i++) {
                         if ( (strDate.getDay()-currentDate.getDay() == 1 )) {
 
-                            final int index = i;
-                            final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
+                            final int canceledHours =   getItem(p).getTime().size();
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
-                            builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
+                            builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(0)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
                             builder.setTitle("Confirmation Message");
                             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "cancelled", ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours,getItem(p).getUid() );
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), "cancelled", getItem(p).getPrice()*0.5 , getItem(p).getExtendedHours(), canceledHours,getItem(p).getUid() );
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -468,6 +478,7 @@ public class ShowReservations extends AppCompatActivity {
                                     String id = databaseReservations.push().getKey();
                                     databaseReservations.child(id).setValue(reservation);
                                     finish();
+
                                 }
                             });
                             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -489,24 +500,26 @@ public class ShowReservations extends AppCompatActivity {
 
 
                         }
-                        else if(strDate.getDay() - currentDate.getDay() == 0 && getItem(p).getTime().get(i)- currentHour >= 1){
+                        else if(strDate.getDay() - currentDate.getDay() == 0 && getItem(p).getTime().get(0)- currentHour >= 1 ){
+                            String message;
 
-                            final int index = i;
+                            final int canceledHours =   getItem(p).getTime().size();
 
-                            final int canceledHours =   (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1) - getItem(p).getTime().get(i);
-
-                            if ( getItem(p).getTime().get(i) == getItem(p).getTime().get(0)){
-                                status = "cancelled";
-                            }
-                            else
-                            {
-                                status = "subcancelled";
-
-                            }
+                           // if ( getItem(p).getTime().get(i) == getItem(p).getTime().get(0)){
+                              final String  status = "cancelled";
+                                 message = "Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(0)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1);
+                          //  }
+//                            else
+//                            {
+//                                status = "subcancelled";
+//                                message = "Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(0)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1);
+//(getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5
+//
+//                            }
 
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
-                            builder.setMessage("Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(i)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1));
+                            builder.setMessage(message);
                             builder.setTitle("Confirmation Message");
                             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
@@ -515,7 +528,7 @@ public class ShowReservations extends AppCompatActivity {
 
 
 
-                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), status, ((getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5), getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), status,getItem(p).getPrice()*0.5 , getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
 
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -537,6 +550,74 @@ public class ShowReservations extends AppCompatActivity {
                                     String id = databaseReservations.push().getKey();
                                     databaseReservations.child(id).setValue(reservation);
                                     finish();
+
+                                }
+                            });
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    finish();
+
+                                }
+                            });
+                            AlertDialog a = builder.create();
+                            a.show();
+
+                        }
+
+                        else if(strDate.getDay() - currentDate.getDay() == 0 && getItem(p).getTime().get(0)- currentHour <=0  && getItem(p).getTime().get(getItem(p).getTime().size()-1)- currentHour >=1 && getItem(p).getTime().size()> 1  ){
+                            String message;
+
+                            final int canceledHours = getItem(p).getTime().get(getItem(p).getTime().size()-1) - currentHour;
+
+                            // if ( getItem(p).getTime().get(i) == getItem(p).getTime().get(0)){
+                          final String status = "subcancelled";
+                            message = "Are you sure you want to cancel the time period from "+ (currentHour+1) + " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1);
+                            final double price = getItem(p).getPrice() - canceledHours*5*0.5;
+                            //  }
+//                            else
+//                            {
+//                                status = "subcancelled";
+//                                message = "Are you sure you want to cancel the time period from "+ getItem(p).getTime().get(0)+ " to " + (getItem(p).getTime().get(getItem(p).getTime().size()-1)+1);
+//(getItem(p).getTime().size() - index) * 5 * 0.5 + (index - 0) * 5
+//
+//                            }
+
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ShowReservations.this);
+                            builder.setMessage(message);
+                            builder.setTitle("Confirmation Message");
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+
+
+
+                                    Reservation reservation = new Reservation(getItem(p).getResNo(), getItem(p).getCarPlateNo(), getItem(p).getZoneName(), getItem(p).getDate(), getItem(p).getTime(), status,price, getItem(p).getExtendedHours(), canceledHours, getItem(p).getUid());
+
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                                    Query applesQuery = ref.child("reservations").orderByChild("resNo").equalTo(getItem(p).getResNo());
+
+                                    applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                appleSnapshot.getRef().removeValue();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+
+                                    String id = databaseReservations.push().getKey();
+                                    databaseReservations.child(id).setValue(reservation);
+                                    finish();
+
                                 }
                             });
                             builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -574,7 +655,7 @@ public class ShowReservations extends AppCompatActivity {
                             }
 
                         }
-                    }
+                //    }
 
 
                 }
