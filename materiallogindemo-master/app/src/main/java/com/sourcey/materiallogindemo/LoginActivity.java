@@ -25,7 +25,8 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText emailText, passwordText ;
+    static EditText emailText;
+    static EditText passwordText ;
     Button signInButton;
     TextView signUpLink , progressBarText;
     ProgressBar progressBar;
@@ -48,6 +49,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         progressBarText = (TextView) findViewById(R.id.progressBarinsideText);
 
+        String email = emailText.getText().toString();
+        String password = passwordText.getText().toString();
+
 
         findViewById(R.id.link_signup).setOnClickListener(this);
         findViewById(R.id.btn_login).setOnClickListener(this);
@@ -59,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
 
-        if (validate()){
+        if (validate(email, password)){
 
             progressBar.setVisibility(View.VISIBLE);
             progressBarText.setVisibility(View.VISIBLE);
@@ -105,24 +109,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-   public boolean validate() {
+   public static boolean validate(String email, String password) {
         boolean valid = true;
 
-       String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
 
        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+           emailText.setError("enter a valid email address");
             valid = false;
        } else {
-           emailText.setError(null);
+          emailText.setError(null);
        }
 
       if (password.isEmpty() || password.length() < 6 || password.length() > 12) {
           passwordText.setError("between 4 and 10 alphanumeric characters");
            valid = false;
        } else {
-           passwordText.setError(null);
+          passwordText.setError(null);
        }
 
        return valid;
